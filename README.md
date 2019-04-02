@@ -49,3 +49,12 @@ for _ in range(1000):
 env.close()
 ```
 
+## Steps for generation a model from URDF
+1. go to src/assets folder
+2. ``` ./create_urdf_file output_name.urdf ```
+if you want to change the parameters of the model 
+``` roscd strirus_robot_description/launch/ && nano robot_description_gen.xml ```
+3. ```./convert_from_urdf_to_mjcf.sh output_name.urdf new_name.xml
+4. Now we are starting to modify to make it applicable.
+- Add in the beginning <include file="terrain.xml"/>
+

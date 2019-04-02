@@ -1,0 +1,85 @@
+<mujoco model="strirus_gamma">
+    <compiler angle="radian" meshdir="../../../strirus_cad_design/stl/collision/" />
+    <size njmax="500" nconmax="100" />
+    <asset>
+        <mesh name="body_1_30_part" file="body_1_30_part.stl" />
+        <mesh name="body_2_30_part" file="body_2_30_part.stl" />
+        <mesh name="bridge_1_part" file="bridge_1_part.stl" />
+        <mesh name="bridge_2_part" file="bridge_2_part.stl" />
+        <mesh name="leg_70" file="leg_70.stl" />
+    </asset>
+    <worldbody>
+        <geom pos="0 0 0.07" type="mesh" mesh="body_1_30_part" />
+        <body name="bridge_1_part" pos="0.247 0 0.07">
+            <inertial pos="0.00668872 0 7.7504e-05" quat="0.707088 0.707088 -0.00517401 0.00517401" mass="0.0934526" diaginertia="0.000234668 0.000231387 2.9584e-05" />
+            <joint name="segment_side_revolute" pos="0 0 0" axis="0 0 -1" />
+            <geom type="mesh" mesh="bridge_1_part" />
+            <body name="bridge_2_part" pos="0.03 0 0">
+                <inertial pos="0.177921 5.65084e-06 -0.00261311" quat="0.49896 0.498874 -0.501125 0.501036" mass="2.44928" diaginertia="0.0463794 0.028806 0.0185617" />
+                <joint name="segment_up_revolute" pos="0 0 0" axis="0 -1 0" />
+                <geom type="mesh" mesh="bridge_2_part" />
+                <geom pos="0.03 0 0" type="mesh" mesh="body_2_30_part" />
+                <body name="leg_left_5" pos="0.09325 0.17893 0" quat="0.482963 -0.224144 -0.836516 -0.12941">
+                    <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+                    <joint name="leg_left_5_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+                    <geom type="mesh" mesh="leg_70" />
+                </body>
+                <body name="leg_left_4" pos="0.19925 0.17893 0" quat="-0.482963 -0.224144 -0.836516 0.12941">
+                    <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+                    <joint name="leg_left_4_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+                    <geom type="mesh" mesh="leg_70" />
+                </body>
+                <body name="leg_left_3" pos="0.30525 0.17893 0" quat="-0.965926 0 0 0.258819">
+                    <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+                    <joint name="leg_left_3_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+                    <geom type="mesh" mesh="leg_70" />
+                </body>
+                <body name="leg_right_5" pos="0.09325 -0.17893 0" quat="0.482963 0.224144 -0.836516 0.12941">
+                    <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+                    <joint name="leg_right_5_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+                    <geom type="mesh" mesh="leg_70" />
+                </body>
+                <body name="leg_right_4" pos="0.19925 -0.17893 0" quat="-0.482963 0.224144 -0.836516 -0.12941">
+                    <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+                    <joint name="leg_right_4_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+                    <geom type="mesh" mesh="leg_70" />
+                </body>
+                <body name="leg_right_3" pos="0.30525 -0.17893 0" quat="-0.965926 0 0 -0.258819">
+                    <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+                    <joint name="leg_right_3_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+                    <geom type="mesh" mesh="leg_70" />
+                </body>
+            </body>
+        </body>
+        <body name="leg_left_2" pos="0.18375 0.17893 0.07" quat="-0.482963 -0.224144 0.836516 -0.12941">
+            <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+            <joint name="leg_left_2_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+            <geom type="mesh" mesh="leg_70" />
+        </body>
+        <body name="leg_left_1" pos="0.07775 0.17893 0.07" quat="0.482963 -0.224144 0.836516 0.12941">
+            <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+            <joint name="leg_left_1_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+            <geom type="mesh" mesh="leg_70" />
+        </body>
+        <body name="leg_left_0" pos="-0.02825 0.17893 0.07" quat="0.965926 0 0 0.258819">
+            <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+            <joint name="leg_left_0_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+            <geom type="mesh" mesh="leg_70" />
+        </body>
+        <body name="leg_right_2" pos="0.18375 -0.17893 0.07" quat="-0.482963 0.224144 0.836516 0.12941">
+            <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+            <joint name="leg_right_2_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+            <geom type="mesh" mesh="leg_70" />
+        </body>
+        <body name="leg_right_1" pos="0.07775 -0.17893 0.07" quat="0.482963 0.224144 0.836516 -0.12941">
+            <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+            <joint name="leg_right_1_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+            <geom type="mesh" mesh="leg_70" />
+        </body>
+        <body name="leg_right_0" pos="-0.02825 -0.17893 0.07" quat="0.965926 0 0 -0.258819">
+            <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
+            <joint name="leg_right_0_revolute_joint" pos="0 0 0" axis="0 -1 0" limited="true" range="-100000 100000" />
+            <geom type="mesh" mesh="leg_70" />
+        </body>
+    </worldbody>
+</mujoco>
