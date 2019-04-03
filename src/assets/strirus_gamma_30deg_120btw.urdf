@@ -7,7 +7,7 @@
   <mujoco>
     <!-- if it doesn't work, try this and put the value by your own
 		$(find strirus_cad_design)/stl/collision-->
-    <compiler balanceinertia="true" meshdir="../../../strirus_cad_design/stl/collision"/>
+    <compiler balanceinertia="true" convexhull="false" fusestatic="false" inertiafromgeom="false" meshdir="../../../strirus_cad_design/stl/collision"/>
   </mujoco>
   <gazebo>
     <self_collide>1</self_collide>
@@ -139,15 +139,15 @@
     <child link="bridge_2_part"/>
     <origin rpy="0 -0.0 0" xyz="0.03 0 0"/>
     <axis xyz="0 -1  0"/>
-    <limit effort="5" lower="0" upper="0" velocity="0.5"/>
-    <joint_properties damping="0.0" friction="0.0"/>
+    <limit effort="5" lower="-1.308996939" upper="1.308996939" velocity="0.5"/>
+    <joint_properties damping="2.0" friction="0.0"/>
   </joint>
   <joint name="segment_side_revolute" type="revolute">
     <parent link="body_1_part"/>
     <child link="bridge_1_part"/>
     <origin rpy="0 0 -0.0" xyz="0.247 0 0"/>
     <axis xyz="0 0  -1"/>
-    <limit effort="5" lower="0" upper="0" velocity="0.5"/>
+    <limit effort="5" lower="-0.261799387799" upper="0.261799387799" velocity="0.5"/>
     <joint_properties damping="0.0" friction="0.0"/>
   </joint>
   <joint name="bridge_2_part_body_2_part_fixed" type="fixed">

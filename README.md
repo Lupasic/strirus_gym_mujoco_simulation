@@ -10,6 +10,7 @@ pip3 install gym
 3. **Install MuJoCo binary** https://www.roboti.us/index.html
 
 Unzip the downloaded mjpro200 directory into ~/.mujoco/mjpro200, and place your license key (the mjkey.txt file from your email) at ~/.mujoco/mjkey.txt. Also, put it in ~/.mujoco/mjpro200/bin
+
 4. **Install MuJoCo package**
 ```
 pip3 install gym[mujoco]
@@ -32,12 +33,11 @@ If you see GLEW initialization error: Missing GL version, then
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libGLEW.so
 ```
 
-if doesnt work, in addition -- make an alias (should check the precise path by your own)
+if doesnt work, in addition -- make an alias (should check the precise path by your own) in ~/.profile
 ```
 sudo ln -s /usr/lib/x86_64-linux-gnu/libGLEW.so.2.0 /usr/lib/x86_64-linux-gnu/libGLEW.so
 ```
 
-in ~/.profile
 5. **Test it**
 ```
 import gym
@@ -50,11 +50,24 @@ env.close()
 ```
 
 ## Steps for generation a model from URDF
+It's already works fine, but firstly, I'd like to explain some steps of generation from XACRO(URDF) to MJCF.
+
+In xacro file you can see these lines:
+```
+<mujoco>
+    <!-- if it doesn't work, try this and put the value by your own $(find strirus_cad_design)/stl/collision-->
+    <compiler balanceinertia="true" convexhull="false" 
+    fusestatic="false" inertiafromgeom="false" 
+    meshdir="../../../strirus_cad_design/stl/collision"/>
+</mujoco>
+```
+
+It is needed for make our xml file applicable for our tasks. _fusestatic_ - is the most important part here, others can be different. It is needed to create our file in the same manner as urdf, in this case you can simply modify it for our purposes.
+
+Next step is following:
 1. go to src/assets folder
 2. ``` ./create_urdf_file output_name.urdf ```
-if you want to change the parameters of the model 
+if you want to change the parameters of the model
 ``` roscd strirus_robot_description/launch/ && nano robot_description_gen.xml ```
-3. ```./convert_from_urdf_to_mjcf.sh output_name.urdf new_name.xml
-4. Now we are starting to modify to make it applicable.
-- Add in the beginning <include file="terrain.xml"/>
-
+3. ```./convert_from_urdf_to_mjcf.sh output_name.urdf new_name.xml```
+4. Now we are starting to modify xml file (mjcf) to make it applicable. All needed lines are in _file_with_needed_text.txt_ . It also contains all necessary information about reasons.

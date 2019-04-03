@@ -1,4 +1,56 @@
-    <include file="terrain.xml"/>
+<!-- Add the scene --> 
+<include file="terrain.xml"/>
+
+<!-- It is needed for sensors and actually, all needed stuff can be added here -->
+    <default>
+        <joint limited="true" damping="1" armature="0"/>
+        <geom condim="3"/>
+        <position ctrlrange="-100 100" ctrllimited="true" forcerange="-2 2" forcelimited="true"/>
+    </default>
+
+
+<!-- We add stiffness parameter for our segments (like a spring) -->
+                    <joint name="segment_up_revolute" pos="0 0 0" axis="0 -1 0" limited="true" range="-1.309 1.309" stiffness="20"/>
+                <joint name="segment_side_revolute" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.261799 0.261799" stiffness="20"/>
+
+
+For all leg revolute joint change the axis sign axis="0 -1 0" -> axis="0 1 0"
+
+<!-- We can make it as a servo motor (controlled by angle, or change word "position" to motor and make it as direct-drive" to control by torque -->
+
+     <actuator>
+        <position name="leg_left_0_revolute_joint" joint="leg_left_0_revolute_joint" />
+	<position name="leg_left_1_revolute_joint" joint="leg_left_1_revolute_joint" />
+	<position name="leg_left_2_revolute_joint" joint="leg_left_2_revolute_joint" />
+	<position name="leg_left_3_revolute_joint" joint="leg_left_3_revolute_joint" />
+	<position name="leg_left_4_revolute_joint" joint="leg_left_4_revolute_joint" />
+	<position name="leg_left_5_revolute_joint" joint="leg_left_5_revolute_joint" />
+        <position name="leg_right_0_revolute_joint" joint="leg_right_0_revolute_joint" />
+	<position name="leg_right_1_revolute_joint" joint="leg_right_1_revolute_joint" />
+	<position name="leg_right_2_revolute_joint" joint="leg_right_2_revolute_joint" />
+	<position name="leg_right_3_revolute_joint" joint="leg_right_3_revolute_joint" />
+	<position name="leg_right_4_revolute_joint" joint="leg_right_4_revolute_joint" />
+	<position name="leg_right_5_revolute_joint" joint="leg_right_5_revolute_joint" />
+    </actuator>
+
+<!-- First sensor provide us all info for fitness function, second - too. Others will be used for something -->
+    <sensor>
+	<framepos name="framePosBody" objtype="body" objname="body_1_part" />
+	<framequat name="frameQuatBody" objtype="body" objname="body_1_part" />
+	<actuatorpos name="leg_left_0_angle_act" actuator="leg_left_0_revolute_joint" />
+	<actuatorpos name="leg_left_1_angle_act" actuator="leg_left_1_revolute_joint" />
+	<actuatorpos name="leg_left_2_angle_act" actuator="leg_left_2_revolute_joint" />
+	<actuatorpos name="leg_left_3_angle_act" actuator="leg_left_3_revolute_joint" />
+	<actuatorpos name="leg_left_4_angle_act" actuator="leg_left_4_revolute_joint" />
+	<actuatorpos name="leg_left_5_angle_act" actuator="leg_left_5_revolute_joint" />
+	<actuatorpos name="leg_right_0_angle_act" actuator="leg_right_0_revolute_joint" />
+	<actuatorpos name="leg_right_1_angle_act" actuator="leg_right_1_revolute_joint" />
+	<actuatorpos name="leg_right_2_angle_act" actuator="leg_right_2_revolute_joint" />
+	<actuatorpos name="leg_right_3_angle_act" actuator="leg_right_3_revolute_joint" />
+	<actuatorpos name="leg_right_4_angle_act" actuator="leg_right_4_revolute_joint" />
+	<actuatorpos name="leg_right_5_angle_act" actuator="leg_right_5_revolute_joint" />
+    </sensor>
+
 
 
 
