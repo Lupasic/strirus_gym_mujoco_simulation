@@ -1,5 +1,5 @@
 # strirus_gym_mujoco_simulation
-Robot should move straight in all directions, forward and side. It can be done due the reason that the robot structure is holonomic.
+Robot should move straight in all directions, forward and side. It can be done due the reason that the robot structure is holonomic./home/lupasic/Programs/catkin_ws/src/strirus_full/strirus_gym_mujoco_simulation/README.md
 
 ## Installation
 1. **Install gym** https://gym.openai.com
@@ -71,3 +71,13 @@ if you want to change the parameters of the model
 ``` roscd strirus_robot_description/launch/ && nano robot_description_gen.xml ```
 3. ```./convert_from_urdf_to_mjcf.sh output_name.urdf new_name.xml```
 4. Now we are starting to modify xml file (mjcf) to make it applicable. All needed lines are in _file_with_needed_text.txt_ . It also contains all necessary information about reasons.
+
+## Prepare gym enviroment
+**How to make your own env** https://github.com/openai/gym/blob/master/docs/creating-environments.md
+```
+from root of module (strirus_gym_mujoco_simulation)
+sudo pip3 install -e .
+```
+
+You can create an instance of the environment with gym.make('gym_foo:foo-v0') in code
+

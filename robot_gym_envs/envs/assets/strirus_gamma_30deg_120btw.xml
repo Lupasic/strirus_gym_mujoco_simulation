@@ -1,10 +1,10 @@
 <mujoco model="strirus_gamma">
-    <compiler convexhull="false" angle="radian" meshdir="../../../strirus_cad_design/stl/collision/" />
+    <compiler convexhull="false" angle="radian" meshdir="../../../../strirus_cad_design/stl/collision/" />
 
     <default>
         <joint limited="true" damping="1" armature="0"/>
         <geom condim="3"/>
-        <position ctrlrange="-100 100" ctrllimited="true" forcerange="-2 2" forcelimited="true"/>
+        <position ctrlrange="-100 100" ctrllimited="true" forcerange="-3 3" forcelimited="true"/>
     </default>
 
 
@@ -115,8 +115,6 @@
     </actuator>
 
     <sensor>
-	<framepos name="framePosBody" objtype="body" objname="body_1_part" />
-	<framequat name="frameQuatBody" objtype="body" objname="body_1_part" />
 	<actuatorpos name="leg_left_0_angle_act" actuator="leg_left_0_revolute_joint" />
 	<actuatorpos name="leg_left_1_angle_act" actuator="leg_left_1_revolute_joint" />
 	<actuatorpos name="leg_left_2_angle_act" actuator="leg_left_2_revolute_joint" />
@@ -129,6 +127,8 @@
 	<actuatorpos name="leg_right_3_angle_act" actuator="leg_right_3_revolute_joint" />
 	<actuatorpos name="leg_right_4_angle_act" actuator="leg_right_4_revolute_joint" />
 	<actuatorpos name="leg_right_5_angle_act" actuator="leg_right_5_revolute_joint" />
+	<framequat name="frameQuatBody1" objtype="body" objname="body_1_part" />
+	<framequat name="frameQuatBody2" objtype="body" objname="body_2_part" />
     </sensor>
 
 </mujoco>
