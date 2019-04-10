@@ -58,7 +58,7 @@ In xacro file you can see these lines:
     <!-- if it doesn't work, try this and put the value by your own $(find strirus_cad_design)/stl/collision-->
     <compiler balanceinertia="true" convexhull="false" 
     fusestatic="false" inertiafromgeom="false" 
-    meshdir="../../../strirus_cad_design/stl/collision"/>
+    meshdir="../../../../strirus_cad_design/stl/collision"/>
 </mujoco>
 ```
 
