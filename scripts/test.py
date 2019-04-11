@@ -8,10 +8,9 @@
 
 import gym
 import robot_gym_envs.envs
-import gym.envs.mujoco.ant
 
-env = gym.make('Strirus_gamma_controller-v0')
-# env = gym.make('Ant-v2')
+# env = gym.make('Strirus_gamma_controller-v0')
+env = gym.make('Ant-v2')
 for i_episode in range(20):
     observation = env.reset()
     for t in range(1000):

@@ -42,6 +42,7 @@ class NN:
     def rollout(self, env, genotype, trials, render=False, seed=None):
         self.reset_net()
         step_total = 0
+
         rew_total = 0
         for j in range(trials):
             # To ensure replicability (we always pass a valid seed, even if fully-random evaluation is going to be run)
@@ -51,6 +52,7 @@ class NN:
                 ob = env.reset()
                 dist_variance = 0
                 cur_task_step = 0
+                cur_rew = 0
                 for t in range(1000):
                     # prepare input var
                     if task == 0:
@@ -76,7 +78,7 @@ class NN:
                     if task == 3:
                         ac[0:2] *= -1
                         ac[9:11] *= -1
-                    ac += ob[:11]
+                    ac += ob[:12]
 
                     # Perform a step
                     ob, rew, done, _ = env.step(ac) # mujoco internally scales actions in the proper ranges!!!
@@ -91,10 +93,23 @@ class NN:
                         dist_variance += abs(ob[23])
 
                     cur_task_step += 1
+                    if cur_task_step == 1000:
+                        if task == 0:
+                            cur_rew = 10*(abs(ob[23]) / dist_variance)
+                        if task == 1:
+                            if ob[23] > 0:
+                                ob[23] = 0
+                            cur_rew = (abs(ob[23]) / dist_variance)
+                        if task == 2:
+                            cur_rew = 10*(abs(ob[24]) / dist_variance)
+                        if task == 3:
+                            if ob[24] > 0:
+                                ob[24] = 0
+                            cur_rew = (abs(ob[24]) / dist_variance)
+                        rew_total += cur_rew/4
+                        step_total += cur_task_step
                     if render:
                         env.render()
-                rew_total += (ob[23]/dist_variance)/4
-                step_total += cur_task_step
             # Transform the list of rewards into an array
 
         return rew_total/trials, step_total
@@ -115,12 +130,7 @@ class NN:
         self.hiddenState = lhidden
         #output calculation
         lout = np.tanh(np.dot(lhidden, self.output_weight))
-        
-        if lout<0:
-            return 0
-        else:
-            return 1
-        
+
         return lout
 
     def evaluateNet(self,genotype):

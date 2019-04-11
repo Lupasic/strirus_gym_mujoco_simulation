@@ -79,5 +79,21 @@ from root of module (strirus_gym_mujoco_simulation)
 sudo pip3 install -e .
 ```
 
-You can create an instance of the environment with gym.make('gym_foo:foo-v0') in code
+You can create an instance of the environment with 
+```
+import robot_gym_envs.envs 
+gym.make('Strirus_gamma_controller-v0')
+```
 
+## Code structure
+- Env
+- Neural network
+- 
+
+## FAQ
+1. If you have problem with os.link part (can be found using debugger (code doesn't run)).
+This problem appears when you activate your code in console with import error.
+
+    delete .lock file here```/usr/local/lib/python3.6/dist-packages/mujoco_py/generated```
+
+2. If Pycharm doesn't see your files, choose your folder -> Mark Directory as -> source root
