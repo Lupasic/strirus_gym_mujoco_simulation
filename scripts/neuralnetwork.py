@@ -53,7 +53,7 @@ class NN:
                 dist_variance = 0
                 cur_task_step = 0
                 cur_rew = 0
-                for t in range(1000):
+                for t in range(2000):
                     # prepare input var
                     if task == 0:
                         ob[20] = 1
@@ -65,20 +65,20 @@ class NN:
                         ob[21] = -1
 
                     cur_ob = ob[:23]
-                    cur_ob[:11] = cur_ob[:11] % (2*math.pi)
+                    # cur_ob[:11] = cur_ob[:11] % (2*math.pi)
                     ac = self.updateNet(cur_ob,genotype)
                     # post processing
-                    if task == 0:
-                        pass
-                    if task == 1:
-                        ac *= -1
-                    if task == 2:
-                        ac[3:5] *= -1
-                        ac[6:8] *= -1
-                    if task == 3:
-                        ac[0:2] *= -1
-                        ac[9:11] *= -1
-                    ac += ob[:12]
+                    # if task == 0:
+                    #     pass
+                    # if task == 1:
+                    #     ac *= -1
+                    # if task == 2:
+                    #     ac[3:5] *= -1
+                    #     ac[6:8] *= -1
+                    # if task == 3:
+                    #     ac[0:2] *= -1
+                    #     ac[9:11] *= -1
+                    # ac += ob[:12]
 
                     # Perform a step
                     ob, rew, done, _ = env.step(ac) # mujoco internally scales actions in the proper ranges!!!

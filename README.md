@@ -38,7 +38,12 @@ if doesnt work, in addition -- make an alias (should check the precise path by y
 sudo ln -s /usr/lib/x86_64-linux-gnu/libGLEW.so.2.0 /usr/lib/x86_64-linux-gnu/libGLEW.so
 ```
 
-5. **Test it**
+5. **Install tensor flow** (It's for main algorithm)
+```
+pip3 install tensorflow
+```
+
+6. **Test it**
 ```
 import gym
 env = gym.make('Ant-v2')

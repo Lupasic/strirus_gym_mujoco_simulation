@@ -88,7 +88,7 @@ def main(argv):
     net = NN(gym.spaces.Box(shape=(23,), low=-10000, high=10000, dtype='float32'), env.action_space, nhiddens)
     # gym.spaces.Box(shape=(23,),low=-10000,high=10000,dtype='float32')
     # env.observation_space
-    weights = np.load('bestgS1.npy')
+    weights = np.load('bestgS2.npy')
 
     net.rollout(env, genotype=weights, trials=ntrials, render=True)
 

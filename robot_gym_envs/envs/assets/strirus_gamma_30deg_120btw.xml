@@ -3,8 +3,9 @@
 
     <default>
         <joint limited="true" damping="1" armature="0"/>
-        <geom condim="3"/>
-        <position ctrlrange="-100 100" ctrllimited="true" forcerange="-3 3" forcelimited="true"/>
+        <geom conaffinity="1" condim="3" density="25.0" friction="1.5 0.1 0.1"/>
+        <motor ctrlrange="-1 1" ctrllimited="true" gear="1" />
+        <general dyntype="filter"/>
     </default>
 
 
@@ -24,11 +25,11 @@
             <geom type="mesh" mesh="body_1_30_part" />
             <body name="bridge_1_part" pos="0.247 0 0">
                 <inertial pos="0.00668872 0 7.7504e-05" quat="0.707088 0.707088 -0.00517401 0.00517401" mass="0.0934526" diaginertia="0.000234668 0.000231387 2.9584e-05" />
-                <joint name="segment_side_revolute" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.261799 0.261799" stiffness="20"/>
+                <!--<joint name="segment_side_revolute" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.261799 0.261799" stiffness="20"/>-->
                 <geom type="mesh" mesh="bridge_1_part" />
                 <body name="bridge_2_part" pos="0.03 0 0">
                     <inertial pos="0.0233113 0 7.7504e-05" quat="0.707088 0.707088 -0.00517243 0.00517243" mass="0.0934526" diaginertia="0.000215113 0.000211831 2.9584e-05" />
-                    <joint name="segment_up_revolute" pos="0 0 0" axis="0 -1 0" limited="true" range="-1.309 1.309" stiffness="20"/>
+                    <!--<joint name="segment_up_revolute" pos="0 0 0" axis="0 -1 0" limited="true" range="-1.309 1.309" stiffness="20"/>-->
                     <geom type="mesh" mesh="bridge_2_part" />
                     <body name="body_2_part" pos="0.03 0 0">
                         <inertial pos="0.154054 5.875e-06 -0.00271984" quat="0.49812 0.498053 -0.501941 0.50187" mass="2.35583" diaginertia="0.0438457 0.0285897 0.0162089" />
@@ -100,18 +101,18 @@
     </worldbody>
 
     <actuator>
-        <position name="leg_left_0_revolute_joint" joint="leg_left_0_revolute_joint" />
-	<position name="leg_left_1_revolute_joint" joint="leg_left_1_revolute_joint" />
-	<position name="leg_left_2_revolute_joint" joint="leg_left_2_revolute_joint" />
-	<position name="leg_left_3_revolute_joint" joint="leg_left_3_revolute_joint" />
-	<position name="leg_left_4_revolute_joint" joint="leg_left_4_revolute_joint" />
-	<position name="leg_left_5_revolute_joint" joint="leg_left_5_revolute_joint" />
-        <position name="leg_right_0_revolute_joint" joint="leg_right_0_revolute_joint" />
-	<position name="leg_right_1_revolute_joint" joint="leg_right_1_revolute_joint" />
-	<position name="leg_right_2_revolute_joint" joint="leg_right_2_revolute_joint" />
-	<position name="leg_right_3_revolute_joint" joint="leg_right_3_revolute_joint" />
-	<position name="leg_right_4_revolute_joint" joint="leg_right_4_revolute_joint" />
-	<position name="leg_right_5_revolute_joint" joint="leg_right_5_revolute_joint" />
+        <motor name="leg_left_0_revolute_joint" joint="leg_left_0_revolute_joint" />
+	<motor name="leg_left_1_revolute_joint" joint="leg_left_1_revolute_joint" />
+	<motor name="leg_left_2_revolute_joint" joint="leg_left_2_revolute_joint" />
+	<motor name="leg_left_3_revolute_joint" joint="leg_left_3_revolute_joint" />
+	<motor name="leg_left_4_revolute_joint" joint="leg_left_4_revolute_joint" />
+	<motor name="leg_left_5_revolute_joint" joint="leg_left_5_revolute_joint" />
+        <motor name="leg_right_0_revolute_joint" joint="leg_right_0_revolute_joint" />
+	<motor name="leg_right_1_revolute_joint" joint="leg_right_1_revolute_joint" />
+	<motor name="leg_right_2_revolute_joint" joint="leg_right_2_revolute_joint" />
+	<motor name="leg_right_3_revolute_joint" joint="leg_right_3_revolute_joint" />
+	<motor name="leg_right_4_revolute_joint" joint="leg_right_4_revolute_joint" />
+	<motor name="leg_right_5_revolute_joint" joint="leg_right_5_revolute_joint" />
     </actuator>
 
     <sensor>
