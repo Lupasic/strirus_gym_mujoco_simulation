@@ -4,7 +4,7 @@
     <default>
         <joint limited="true" damping="1" armature="0"/>
         <geom conaffinity="1" condim="3" density="25.0" friction="1.5 0.1 0.1"/>
-        <motor ctrlrange="-1 1" ctrllimited="true" gear="1" />
+        <motor ctrlrange="-1 1" ctrllimited="true" gear="10" />
         <general dyntype="filter"/>
     </default>
 
@@ -116,18 +116,18 @@
     </actuator>
 
     <sensor>
-	<actuatorpos name="leg_left_0_angle_act" actuator="leg_left_0_revolute_joint" />
-	<actuatorpos name="leg_left_1_angle_act" actuator="leg_left_1_revolute_joint" />
-	<actuatorpos name="leg_left_2_angle_act" actuator="leg_left_2_revolute_joint" />
-	<actuatorpos name="leg_left_3_angle_act" actuator="leg_left_3_revolute_joint" />
-	<actuatorpos name="leg_left_4_angle_act" actuator="leg_left_4_revolute_joint" />
-	<actuatorpos name="leg_left_5_angle_act" actuator="leg_left_5_revolute_joint" />
-	<actuatorpos name="leg_right_0_angle_act" actuator="leg_right_0_revolute_joint" />
-	<actuatorpos name="leg_right_1_angle_act" actuator="leg_right_1_revolute_joint" />
-	<actuatorpos name="leg_right_2_angle_act" actuator="leg_right_2_revolute_joint" />
-	<actuatorpos name="leg_right_3_angle_act" actuator="leg_right_3_revolute_joint" />
-	<actuatorpos name="leg_right_4_angle_act" actuator="leg_right_4_revolute_joint" />
-	<actuatorpos name="leg_right_5_angle_act" actuator="leg_right_5_revolute_joint" />
+	<jointpos name="leg_left_0_angle_act" joint="leg_left_0_revolute_joint" />
+	<jointpos name="leg_left_1_angle_act" joint="leg_left_1_revolute_joint" />
+	<jointpos name="leg_left_2_angle_act" joint="leg_left_2_revolute_joint" />
+	<jointpos name="leg_left_3_angle_act" joint="leg_left_3_revolute_joint" />
+	<jointpos name="leg_left_4_angle_act" joint="leg_left_4_revolute_joint" />
+	<jointpos name="leg_left_5_angle_act" joint="leg_left_5_revolute_joint" />
+	<jointpos name="leg_right_0_angle_act" joint="leg_right_0_revolute_joint" />
+	<jointpos name="leg_right_1_angle_act" joint="leg_right_1_revolute_joint" />
+	<jointpos name="leg_right_2_angle_act" joint="leg_right_2_revolute_joint" />
+	<jointpos name="leg_right_3_angle_act" joint="leg_right_3_revolute_joint" />
+	<jointpos name="leg_right_4_angle_act" joint="leg_right_4_revolute_joint" />
+	<jointpos name="leg_right_5_angle_act" joint="leg_right_5_revolute_joint" />
 	<framequat name="frameQuatBody1" objtype="body" objname="body_1_part" />
 	<framequat name="frameQuatBody2" objtype="body" objname="body_2_part" />
     </sensor>

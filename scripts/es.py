@@ -83,7 +83,6 @@ def initialize():
     get_session().run(tf.variables_initializer(new_variables))
     ALREADY_INITIALIZED.update(new_variables)
 
-
 # ================================================================
 # Model components
 # ================================================================
@@ -253,7 +252,7 @@ class Policy:
         )
 
     # === Rollouts/training ===
-    def rollout(self, env, render=False, timestep_limit=None, save_obs=False, random_stream=None, trial=0, seed=None):
+    def rollout(self, env, render=False, timestep_limit=1000, save_obs=False, random_stream=None, trial=0, seed=None):
         global obSpace
         global acSpace
         global doTest
@@ -261,6 +260,13 @@ class Policy:
 		If random_stream is provided, the rollout will take noisy actions with noise drawn from that stream.
 		Otherwise, no action noise will be added.
 		"""
+        # render=False
+
+        max_dist_var = 4.5
+        w1 = 1
+        w2 = 2
+
+
         env_timestep_limit = env.spec.tags.get('wrapper_config.TimeLimit.max_episode_steps')  # This might be fixed...
         if env_timestep_limit is None:
             env_timestep_limit = 1000
@@ -268,7 +274,6 @@ class Policy:
         if timestep_limit is None:
             timestep_limit = 1000
         rews = []
-        t = 0
         if save_obs:
             obs = []
         # To ensure replicability (we always pass a valid seed, even if fully-random evaluation is going to be run)
@@ -293,25 +298,9 @@ class Policy:
                     ob[21] = -1
                 #receive output values
                 ob = ob[:23]
-                if not "Dict" in obSpace:
-                    ac = self.act(ob[None], random_stream=random_stream)[0]
-                else:
-                    # In case the observation is in a Dict, we extract it
-                    currOb = ob['observation']
-                    ac = self.act(currOb[None], random_stream=random_stream)[0]
-                # Perform checks on the action to be performed
-                if not "Discrete" in acSpace:
-                    # Check action range
-                    if self.ac_bins == 'binary:' or self.nonlin_out:
-                        # We truncate outputs out of range [-1,1] when they are binary or come from tanh
-                        for i in range(ac.shape[0]):
-                            if ac[i] > 1.0:
-                                ac[i] = 1.0
-                            if ac[i] < -1.0:
-                                ac[i] = -1.0
-                else:
-                    # In case of discrete action, select the one corresponding to the neuron with the highest activation
-                    ac = np.argmax(ac)
+                ob[:12] = [math.fmod(i,math.pi*2) for i in ob[:12]]
+                ac = self.act(ob[None], random_stream=random_stream)[0]
+                ac = (ac + 1.0)/2.0
                 # output post processing
                 if task == 0:
                     pass
@@ -323,7 +312,7 @@ class Policy:
                 if task == 3:
                     ac[0:2] *= -1
                     ac[9:11] *= -1
-                ac += ob[:12]
+                # ac += ob[:12]
 
 
                 # Save observations
@@ -348,37 +337,43 @@ class Policy:
                     dist_variance += abs(ob[23])
                 if task == 3:
                     dist_variance += abs(ob[23])
+                # increase work by reducing dummy robots
+                # if task in [0,1] and dist_variance > max_dist_var:
+                #     cur_rew = 0
+                #     rews.append(cur_rew/tasks_amount)
+                #     break
+                # if task in [2,3] and dist_variance > max_dist_var:
+                #     cur_rew = 0
+                #     rews.append(cur_rew / tasks_amount)
+                #     break
 
-                if cur_task_step == timestep_limit:
+                if cur_task_step == timestep_limit or dist_variance > max_dist_var:
                     if task == 0:
-                        cur_rew = 10 * (abs(ob[23]) / dist_variance)
+                        cur_rew = w1*math.atan2(abs(ob[23]),dist_variance) + w2*(abs(ob[23])/cur_task_step)
                     if task == 1:
-                        if ob[23] > 0:
-                            ob[23] = 0
-                        cur_rew = (abs(ob[23]) / dist_variance)
+                        cur_rew = w1*math.atan2(abs(ob[23]),dist_variance) + w2*(abs(ob[23])/cur_task_step)
                     if task == 2:
-                        cur_rew = 10 * (abs(ob[24]) / dist_variance)
+                        cur_rew = (w1*math.atan2(abs(ob[24]),dist_variance) + w2*(abs(ob[24])/cur_task_step))
                     if task == 3:
-                        if ob[24] > 0:
-                            ob[24] = 0
-                        cur_rew = (abs(ob[24]) / dist_variance)
+                        cur_rew = (w1*math.atan2(abs(ob[24]),dist_variance) + w2*(abs(ob[24])/cur_task_step))
 
-                    rews.append(cur_rew/tasks_amount)
-                    t += 1
+                    rews.append(cur_rew / tasks_amount)
+                    break
 
                 if render:
                     env.render()
                 if done:
+
                     break
-                if doTest:
-                    # Add a sleep of 50ms in case of test
-                    time.sleep(0.05)
-            # Transform the list of rewards into an array
-            rews = np.array(rews, dtype=np.float32)
-            if save_obs:
-                # Return the observations too!!!
-                return rews, t, np.array(obs)
-        return rews, t
+                # if doTest:
+                #     # Add a sleep of 50ms in case of test
+                #     time.sleep(0.05)
+        # Transform the list of rewards into an array
+        rews = np.array(rews, dtype=np.float32)
+        if save_obs:
+            # Return the observations too!!!
+            return rews, task+1, np.array(obs)
+        return rews, task+1
 
     def set_trainable_flat(self, x):
         self._setfromflat(x)
@@ -1779,6 +1774,10 @@ def main(argv):
             if (i < argc):
                 filedir = argv[i]
                 i += 1
+        elif(argv[i] == "-h"):
+            helper()
+            i +=1
+            return
         else:
             # We simply ignore the argument
             print("Invalid argument %s" % argv[i])
