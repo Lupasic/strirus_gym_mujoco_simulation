@@ -1,26 +1,24 @@
 # Humanoid task
 
+import configparser
+import math
+import os
+import pickle
+import sys
+import time
+
 # Libraries to be imported
 import gym
+import h5py
 import numpy as np
 import tensorflow as tf
-from numpy import floor, log, eye, zeros, array, sqrt, sum, dot, tile, outer, real
-from numpy import exp, diag, power, ravel
+from numpy import exp, diag, power
+from numpy import floor, log, eye, array, sqrt, sum, dot, tile, outer, real
 from numpy.linalg import eig, norm
-from numpy.random import randn
-import math
-import random
-import time
-from scipy import zeros, ones
+from scipy import zeros
 from scipy.linalg import expm
-import configparser
-import sys
-import os
-from six import integer_types
-import struct
-import pickle
-import h5py
 import robot_gym_envs.envs
+
 
 # Directory of the script .py
 scriptdirname = os.path.dirname(os.path.realpath(__file__))
@@ -82,6 +80,7 @@ def initialize():
     # Initialize all variables
     get_session().run(tf.variables_initializer(new_variables))
     ALREADY_INITIALIZED.update(new_variables)
+
 
 # ================================================================
 # Model components
@@ -252,20 +251,23 @@ class Policy:
         )
 
     # === Rollouts/training ===
-    def rollout(self, env, render=False, timestep_limit=1000, save_obs=False, random_stream=None, trial=0, seed=None):
+    def rollout(self, env, render=False, timestep_limit=None, save_obs=False, random_stream=None, trial=0, seed=None):
         global obSpace
         global acSpace
         global doTest
+        global max_dist_var
+        global w1
+        global w2
+        global leg_rand_pos
+        global step_time_individual_limit
+        global tasks_amount
         """
 		If random_stream is provided, the rollout will take noisy actions with noise drawn from that stream.
 		Otherwise, no action noise will be added.
 		"""
-        # render=False
+        # render = True
 
-        max_dist_var = 4.5
-        w1 = 1
-        w2 = 2
-
+        timestep_limit = step_time_individual_limit
 
         env_timestep_limit = env.spec.tags.get('wrapper_config.TimeLimit.max_episode_steps')  # This might be fixed...
         if env_timestep_limit is None:
@@ -280,7 +282,6 @@ class Policy:
         if seed is not None:
             env.seed(seed)
 
-        tasks_amount = 4
         for task in range(tasks_amount):
             dist_variance = 0
             cur_task_step = 0
@@ -296,11 +297,11 @@ class Policy:
                     ob[21] = 1
                 if task == 3:
                     ob[21] = -1
-                #receive output values
-                ob = ob[:23]
-                ob[:12] = [math.fmod(i,math.pi*2) for i in ob[:12]]
+                ob[:12] = [math.fmod(i, math.pi * 2) for i in ob[:12]]
+
+                # receive output values
                 ac = self.act(ob[None], random_stream=random_stream)[0]
-                ac = (ac + 1.0)/2.0
+                ac = (ac + 1.0) / 2.0
                 # output post processing
                 if task == 0:
                     pass
@@ -314,7 +315,6 @@ class Policy:
                     ac[9:11] *= -1
                 # ac += ob[:12]
 
-
                 # Save observations
                 if save_obs:
                     if not "Dict" in obSpace:
@@ -327,35 +327,30 @@ class Policy:
                 # Perform a step
                 ob, rew, done, _ = env.step(ac)  # mujoco internally scales actions in the proper ranges!!!
                 cur_task_step += 1
-
+                body_1_pos = env.unwrapped.data.get_body_xpos("body_1_part").flat
                 # Append the reward
                 if task == 0:
-                    dist_variance += abs(ob[24])
+                    dist_variance += abs(body_1_pos[1])
                 if task == 1:
-                    dist_variance += abs(ob[24])
+                    dist_variance += abs(body_1_pos[1])
                 if task == 2:
-                    dist_variance += abs(ob[23])
+                    dist_variance += abs(body_1_pos[0])
                 if task == 3:
-                    dist_variance += abs(ob[23])
-                # increase work by reducing dummy robots
-                # if task in [0,1] and dist_variance > max_dist_var:
-                #     cur_rew = 0
-                #     rews.append(cur_rew/tasks_amount)
-                #     break
-                # if task in [2,3] and dist_variance > max_dist_var:
-                #     cur_rew = 0
-                #     rews.append(cur_rew / tasks_amount)
-                #     break
+                    dist_variance += abs(body_1_pos[0])
 
                 if cur_task_step == timestep_limit or dist_variance > max_dist_var:
                     if task == 0:
-                        cur_rew = w1*math.atan2(abs(ob[23]),dist_variance) + w2*(abs(ob[23])/cur_task_step)
+                        cur_rew = w1 * math.atan2(abs(body_1_pos[0]), dist_variance) + w2 * (
+                                abs(body_1_pos[0]) / cur_task_step)
                     if task == 1:
-                        cur_rew = w1*math.atan2(abs(ob[23]),dist_variance) + w2*(abs(ob[23])/cur_task_step)
+                        cur_rew = w1 * math.atan2(abs(body_1_pos[0]), dist_variance) + w2 * (
+                                abs(body_1_pos[0]) / cur_task_step)
                     if task == 2:
-                        cur_rew = (w1*math.atan2(abs(ob[24]),dist_variance) + w2*(abs(ob[24])/cur_task_step))
+                        cur_rew = w1 * math.atan2(abs(body_1_pos[1]), dist_variance) + w2 * (
+                                abs(body_1_pos[1]) / cur_task_step)
                     if task == 3:
-                        cur_rew = (w1*math.atan2(abs(ob[24]),dist_variance) + w2*(abs(ob[24])/cur_task_step))
+                        cur_rew = w1 * math.atan2(abs(body_1_pos[1]), dist_variance) + w2 * (
+                                abs(body_1_pos[1]) / cur_task_step)
 
                     rews.append(cur_rew / tasks_amount)
                     break
@@ -363,7 +358,6 @@ class Policy:
                 if render:
                     env.render()
                 if done:
-
                     break
                 # if doTest:
                 #     # Add a sleep of 50ms in case of test
@@ -372,8 +366,8 @@ class Policy:
         rews = np.array(rews, dtype=np.float32)
         if save_obs:
             # Return the observations too!!!
-            return rews, task+1, np.array(obs)
-        return rews, task+1
+            return rews, task + 1, np.array(obs)
+        return rews, task + 1
 
     def set_trainable_flat(self, x):
         self._setfromflat(x)
@@ -857,7 +851,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
             np.save(fname, tmpstat)
 
         print('Seed %d Gen %d Steps %d Bestfit %.2f bestsam %.2f Avg %.2f Elapsed %d' % (
-        seed, cgen, ceval, bestfit, fitness[0], averagef, elapsed))
+            seed, cgen, ceval, bestfit, fitness[0], averagef, elapsed))
 
     end_time = time.time()
     print('Simulation took %d seconds' % (end_time - start_time))
@@ -866,7 +860,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
     fname = filedir + "/S" + str(seed) + ".fit"
     fp = open(fname, "w")
     fp.write('Seed %d Gen %d Evaluat %d Bestfit %.2f bestoffspring %.2f Average %.2f Runtime %d\n' % (
-    seed, cgen, ceval, bestfit, fitness[0], averagef, (time.time() - start_time)))
+        seed, cgen, ceval, bestfit, fitness[0], averagef, (time.time() - start_time)))
     fp.close()
     # Stat file
     fname = filedir + "/statS" + str(seed)
@@ -923,7 +917,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
     rs = np.random.RandomState(seed)
 
     print("ES: seed %d batchSize %d stepsize %lf noiseStdDev %lf nparams %d" % (
-    seed, batchSize, stepsize, noiseStdDev, nparams))
+        seed, batchSize, stepsize, noiseStdDev, nparams))
 
     # main loop
     elapsed = 0
@@ -1090,7 +1084,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
 
         # Print information
         print('Seed %d gen %d steps %d bestfit %.2f bestsam %.2f Avg %.2f Elapsed %d' % (
-        seed, cgen, ceval, bestfit, fitness[batchSize * 2 - 1], averagef, elapsed))
+            seed, cgen, ceval, bestfit, fitness[batchSize * 2 - 1], averagef, elapsed))
 
     end_time = time.time()
     print('Simulation took %d seconds' % (end_time - start_time))
@@ -1099,7 +1093,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
     fname = filedir + "/S" + str(seed) + ".fit"
     fp = open(fname, "w")
     fp.write('Seed %d gen %d eval %d bestfit %.2f bestoffspring %.2f average %.2f runtime %d\n' % (
-    seed, cgen, ceval, bestfit, fitness[batchSize * 2 - 1], averagef, (time.time() - start_time)))
+        seed, cgen, ceval, bestfit, fitness[batchSize * 2 - 1], averagef, (time.time() - start_time)))
     fp.close()
     # Stat file
     fname = filedir + "/statS" + str(seed)
@@ -1307,7 +1301,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
             np.save(fname, tmpstat)
 
         print('Seed %d Gen %d Steps %d Bestfit %.2f bestsam %.2f Avg %.2f Elapsed %d' % (
-        seed, cgen, ceval, bestfit, fitness[0], averagef, elapsed))
+            seed, cgen, ceval, bestfit, fitness[0], averagef, elapsed))
 
     end_time = time.time()
     print('Simulation took %d seconds' % (end_time - start_time))
@@ -1316,7 +1310,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
     fname = filedir + "/S" + str(seed) + ".fit"
     fp = open(fname, "w")
     fp.write('Seed %d Gen %d Evaluat %d Bestfit %.2f bestoffspring %.2f Average %.2f Runtime %d\n' % (
-    seed, cgen, ceval, bestfit, fitness[0], averagef, (time.time() - start_time)))
+        seed, cgen, ceval, bestfit, fitness[0], averagef, (time.time() - start_time)))
     fp.close()
     fname = filedir + "/statS" + str(seed)
     statsize = np.shape(stat)[0]
@@ -1425,10 +1419,20 @@ def parseConfigFile(filename):
     global out_type
     global norm_inp
 
+    global max_dist_var
+    global w1
+    global w2
+    global leg_rand_pos
+    global max_processes
+    global step_time_individual_limit
+    global tasks_amount
+
     # The configuration file must have the following sections:
     # [EVAL]: parameters for the algorithm
     # [POLICY]: parameters of the policy
-
+    # [FITNESS]: parameters for fitness func
+    # [ROBOT]: parameters for robot
+    # [OTHERS]: parameters like multiprocessing and so on
     config = configparser.ConfigParser()
     config.read(filename)
 
@@ -1499,6 +1503,26 @@ def parseConfigFile(filename):
     else:
         for layer in range(numHiddenLayers):
             hidden_dims.append(numHiddens)
+
+    # section FITNESS
+    if (config.has_option("FITNESS", "max_dist_var")):
+        max_dist_var = config.getfloat("FITNESS", "max_dist_var")
+    if (config.has_option("FITNESS", "w1")):
+        w1 = config.getfloat("FITNESS", "w1")
+    if (config.has_option("FITNESS", "w2")):
+        w2 = config.getfloat("FITNESS", "w2")
+
+    # section ROBOT
+    if (config.has_option("ROBOT", "leg_rand_pos")):
+        leg_rand_pos = config.getint("ROBOT", "leg_rand_pos")
+
+    # section OTHERS
+    if (config.has_option("OTHERS", "max_processes")):
+        max_processes = config.getint("OTHERS", "max_processes")
+    if (config.has_option("OTHERS", "step_time_individual_limit")):
+        step_time_individual_limit = config.getint("OTHERS", "step_time_individual_limit")
+    if (config.has_option("OTHERS", "tasks_amount")):
+        tasks_amount = config.getint("OTHERS", "tasks_amount")
 
 
 def helper():
@@ -1725,6 +1749,12 @@ def main(argv):
     global acSpace
     global doTest
 
+    global max_dist_var
+    global w1
+    global w2
+    global leg_rand_pos
+    global max_processes
+    global step_time_individual_limit
     # Processing command line argument
     argc = len(argv)
 
@@ -1774,9 +1804,9 @@ def main(argv):
             if (i < argc):
                 filedir = argv[i]
                 i += 1
-        elif(argv[i] == "-h"):
+        elif (argv[i] == "-h"):
             helper()
-            i +=1
+            i += 1
             return
         else:
             # We simply ignore the argument
@@ -1812,10 +1842,18 @@ def main(argv):
         nonlin_out = True
         init_type = "normc"
         norm_inp = False
+
+        max_dist_var = 4.5
+        w1 = 1
+        w2 = 2
+        leg_rand_pos = 0
+        max_processes = 1
+        step_time_individual_limit = 1000
+
         print(
             "Default settings: id_algo %d nevals %d ntrials %d numHiddens %d numHiddenLayers %d environment %s fullyRandom %d stepSize %.2f noiseStdDev %.2f sampleSize %d ac_bins %s ac_noise_std %lf connection_type %s nonlin_type %s nonlin_out %d init_type %s norm_inp %d" % (
-            id_algo, nevals, ntrials, numHiddens, numHiddenLayers, environment, fullyRandom, stepsize, noiseStdDev,
-            sampleSize, ac_bins, ac_noise_std, connection_type, nonlin_type, nonlin_out, init_type, norm_inp))
+                id_algo, nevals, ntrials, numHiddens, numHiddenLayers, environment, fullyRandom, stepsize, noiseStdDev,
+                sampleSize, ac_bins, ac_noise_std, connection_type, nonlin_type, nonlin_out, init_type, norm_inp))
     else:
         # Parse configuration file
         parseConfigFile(filename)
@@ -1826,8 +1864,7 @@ def main(argv):
     # Check if the environment comes from pybullet
     if "Bullet" in environment:
         # Import pybullet
-        import pybullet
-        import pybullet_envs
+        pass
 
     # Get the environment
     env = gym.make(environment)
@@ -1844,8 +1881,7 @@ def main(argv):
     elif "Box" in obSpace:
         # Box
         # I have to put in observation_space more info than it is needed, so i am reduce the dimension.
-        # currObSpace = env.observation_space
-        currObSpace = gym.spaces.Box(shape=(23,),low=-10000,high=10000,dtype='float32')
+        currObSpace = env.observation_space
     else:
         print("Invalid obSpace " + str(obSpace))
         sys.exit(-1)
@@ -1899,7 +1935,7 @@ def main(argv):
     if not doTest:
         # Evolution
         print("evolution: env %s nreplications %d id_algo %d nevals %d ntrials %d" % (
-        environment, nreplications, id_algo, nevals, ntrials))
+            environment, nreplications, id_algo, nevals, ntrials))
         evolve(env, policy, ob_stat, cseed, nevals, ntrials)
     else:
         # Test

@@ -20,10 +20,10 @@ class Strirus_gamma_controller(mujoco_env.MujocoEnv, utils.EzPickle):
     def _get_obs(self):
         return np.concatenate([
             self.sim.data.sensordata.flat,
-            [0,0,0],
-            self.data.get_body_xpos("body_1_part").flat,
-            self.sim.data.get_body_xquat("body_1_part").flat,
-            self.sim.data.get_body_xquat("body_2_part").flat
+            [0,0,0]
+            # self.data.get_body_xpos("body_1_part").flat,
+            # self.sim.data.get_body_xquat("body_1_part").flat,
+            # self.sim.data.get_body_xquat("body_2_part").flat
         ])
 
     def reset_model(self):
