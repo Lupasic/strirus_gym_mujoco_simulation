@@ -3,8 +3,6 @@
 <!-- add info about compiler etc, this file will be less changed -->
     <statistic extent="2" meansize=".05"/>
 
-    <option timestep="0.01" solver="Newton" iterations="50" tolerance="1e-10" jacobian="sparse" cone="pyramidal"/>
-
 
 
     <visual>

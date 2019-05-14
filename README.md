@@ -19,6 +19,7 @@ If you have any problems, https://github.com/openai/mujoco-py
 
 I had problem with LD_LIBRARY_PATH, solution is to install it 
 ```
+sudo apt install libosmesa6-dev libgl1-mesa-glx libglfw3 patchelf libglew2.0
 sudo LD_LIBRARY_PATH=$HOME/.mujoco/mujoco200/bin pip3 install mujoco-py
 ```
 also add 

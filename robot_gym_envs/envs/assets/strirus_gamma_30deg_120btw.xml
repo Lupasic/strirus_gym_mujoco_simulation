@@ -1,10 +1,12 @@
 <mujoco model="strirus_gamma">
     <compiler convexhull="false" angle="radian" meshdir="../../../../strirus_cad_design/stl/collision/" />
 
+    <option timestep="0.01" solver="Newton" iterations="50" tolerance="1e-10" jacobian="auto" cone="pyramidal"/>
+
     <default>
         <joint limited="true" damping="1" armature="0"/>
-        <geom conaffinity="1" condim="3" density="25.0" friction="1.5 0.1 0.1"/>
-        <motor ctrlrange="-1 1" ctrllimited="true" gear="10" />
+        <geom conaffinity="1" condim="3" friction="0.9 0.5 0.1"/>
+        <motor ctrlrange="-1 1" ctrllimited="true" gear="5" forcelimited="false" forcerange="-0.2 0.2"/>
         <general dyntype="filter"/>
     </default>
 

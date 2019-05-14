@@ -7,6 +7,8 @@ import pickle
 import sys
 import time
 
+import statistics
+
 # Libraries to be imported
 import gym
 import h5py
@@ -18,7 +20,6 @@ from numpy.linalg import eig, norm
 from scipy import zeros
 from scipy.linalg import expm
 import robot_gym_envs.envs
-
 
 # Directory of the script .py
 scriptdirname = os.path.dirname(os.path.realpath(__file__))
@@ -261,13 +262,18 @@ class Policy:
         global leg_rand_pos
         global step_time_individual_limit
         global tasks_amount
+        global sigma
+        global max_pos_acc_per_step
         """
 		If random_stream is provided, the rollout will take noisy actions with noise drawn from that stream.
 		Otherwise, no action noise will be added.
 		"""
         # render = True
 
-        timestep_limit = step_time_individual_limit
+        if not doTest:
+            timestep_limit = step_time_individual_limit
+        else:
+            timestep_limit = 4000
 
         env_timestep_limit = env.spec.tags.get('wrapper_config.TimeLimit.max_episode_steps')  # This might be fixed...
         if env_timestep_limit is None:
@@ -278,14 +284,15 @@ class Policy:
         rews = []
         if save_obs:
             obs = []
+        accs =[]
         # To ensure replicability (we always pass a valid seed, even if fully-random evaluation is going to be run)
         if seed is not None:
             env.seed(seed)
 
         for task in range(tasks_amount):
             dist_variance = 0
-            cur_task_step = 0
             cur_rew = 0
+            z_ax =[]
             ob = env.reset()
             for cur_task_step in range(timestep_limit):
                 # prepare input var
@@ -301,7 +308,17 @@ class Policy:
 
                 # receive output values
                 ac = self.act(ob[None], random_stream=random_stream)[0]
+                ac = ac/norm(ac)
                 ac = (ac + 1.0) / 2.0
+                if cur_task_step == 0:
+                    prev_ac = ac
+                else:
+                    ac = sigma * ac + (1 - sigma) * prev_ac
+                    if (abs(ac - prev_ac) > max_pos_acc_per_step).any():
+                        #penalti
+                        dist_variance = 99999
+                    prev_ac = ac
+
                 # output post processing
                 if task == 0:
                     pass
@@ -327,21 +344,35 @@ class Policy:
                 # Perform a step
                 ob, rew, done, _ = env.step(ac)  # mujoco internally scales actions in the proper ranges!!!
                 cur_task_step += 1
+
+
                 body_1_pos = env.unwrapped.data.get_body_xpos("body_1_part").flat
+                body_2_pos = env.unwrapped.data.get_body_xpos("body_2_part").flat
                 # Append the reward
                 if task == 0:
-                    dist_variance += abs(body_1_pos[1])
+                    if dist_variance < abs(body_1_pos[1]) or dist_variance < abs(body_2_pos[1]):
+                        if dist_variance < abs(body_1_pos[1]):
+                            dist_variance = abs(body_1_pos[1])
+                        else:
+                            dist_variance = abs(body_2_pos[1])
+                    # dist_variance += abs(body_1_pos[1])
                 if task == 1:
                     dist_variance += abs(body_1_pos[1])
                 if task == 2:
                     dist_variance += abs(body_1_pos[0])
                 if task == 3:
                     dist_variance += abs(body_1_pos[0])
+                z_ax.append((body_1_pos[2] + body_2_pos[2])/2)
 
-                if cur_task_step == timestep_limit or dist_variance > max_dist_var:
+                if doTest:
+                    finish = cur_task_step == timestep_limit
+                else:
+                    finish = cur_task_step == timestep_limit or dist_variance > max_dist_var
+
+                if finish:
                     if task == 0:
-                        cur_rew = w1 * math.atan2(abs(body_1_pos[0]), dist_variance) + w2 * (
-                                abs(body_1_pos[0]) / cur_task_step)
+                        cur_rew = w1 * math.atan2(abs(body_1_pos[0]), dist_variance) + w2 * abs(body_1_pos[0]) \
+                                  + statistics.median(z_ax)
                     if task == 1:
                         cur_rew = w1 * math.atan2(abs(body_1_pos[0]), dist_variance) + w2 * (
                                 abs(body_1_pos[0]) / cur_task_step)
@@ -353,6 +384,7 @@ class Policy:
                                 abs(body_1_pos[1]) / cur_task_step)
 
                     rews.append(cur_rew / tasks_amount)
+                    dist_variance = 0
                     break
 
                 if render:
@@ -368,6 +400,7 @@ class Policy:
             # Return the observations too!!!
             return rews, task + 1, np.array(obs)
         return rews, task + 1
+
 
     def set_trainable_flat(self, x):
         self._setfromflat(x)
@@ -1340,6 +1373,7 @@ def evolve(env, policy, ob_stat, seed, nevals, ntrials):
 # Test evolved individual
 def test(env, policy, seed, ntrials, centroidTest):
     global filedir
+    global step_time_individual_limit
     # Load best individual
     if centroidTest:
         fname = filedir + "/centroidS" + str(seed) + ".npy"
@@ -1362,7 +1396,7 @@ def test(env, policy, seed, ntrials, centroidTest):
         cseed = int(cseed)
         print("testing seed %d" % cseed)
         env.render()
-        eval_rews, eval_length = policy.rollout(env, render=True, timestep_limit=1000, trial=0,
+        eval_rews, eval_length = policy.rollout(env, render=True, timestep_limit=step_time_individual_limit*4, trial=0,
                                                 seed=cseed)  # eval rollouts don't obey task_data.timestep_limit
         fit = eval_rews.sum()
     # env.close()
@@ -1383,7 +1417,7 @@ def test(env, policy, seed, ntrials, centroidTest):
         for t in range(ntrials):
             cseed = int(seeds[t])
             env.render()
-            eval_rews, eval_length = policy.rollout(env, render=True, timestep_limit=1000, trial=t,
+            eval_rews, eval_length = policy.rollout(env, render=True, timestep_limit=step_time_individual_limit*4, trial=t,
                                                     seed=cseed)  # eval rollouts don't obey task_data.timestep_limit
             eval_return = eval_rews.sum()
             print("trial %d - fit %lf" % (t, eval_return))
@@ -1426,6 +1460,8 @@ def parseConfigFile(filename):
     global max_processes
     global step_time_individual_limit
     global tasks_amount
+    global sigma
+    global max_pos_acc_per_step
 
     # The configuration file must have the following sections:
     # [EVAL]: parameters for the algorithm
@@ -1511,6 +1547,8 @@ def parseConfigFile(filename):
         w1 = config.getfloat("FITNESS", "w1")
     if (config.has_option("FITNESS", "w2")):
         w2 = config.getfloat("FITNESS", "w2")
+    if (config.has_option("FITNESS", "sigma")):
+        sigma = config.getfloat("FITNESS", "sigma")
 
     # section ROBOT
     if (config.has_option("ROBOT", "leg_rand_pos")):
@@ -1523,6 +1561,8 @@ def parseConfigFile(filename):
         step_time_individual_limit = config.getint("OTHERS", "step_time_individual_limit")
     if (config.has_option("OTHERS", "tasks_amount")):
         tasks_amount = config.getint("OTHERS", "tasks_amount")
+    if (config.has_option("OTHERS", "max_pos_acc_per_step")):
+        max_pos_acc_per_step = config.getfloat("OTHERS", "max_pos_acc_per_step")
 
 
 def helper():

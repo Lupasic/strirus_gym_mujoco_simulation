@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="lupasic_vm@10.90.137.5:22">
+    <serverData>
+      <paths name="lupasic_vm@10.90.137.5:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/lupasic_vm/Programs/catkin_ws/strirus_full/strirus_gym_mujoco_simulation" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

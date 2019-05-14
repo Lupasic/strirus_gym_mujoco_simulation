@@ -3,34 +3,18 @@
   <component name="ChangeListManager">
     <list default="true" id="cbd9178b-538e-486f-a970-0022756c69ff" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robot_gym_envs/envs/strirus_gamma_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot_gym_envs/envs/strirus_gamma_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/.ipynb_checkpoints/plot-checkpoint.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/robot_gym_envs/envs/assets/terrain.xml" beforeDir="false" afterPath="$PROJECT_DIR$/robot_gym_envs/envs/assets/terrain.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/es.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/es.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_big/bestSeedS1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_big/bestSeedS1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_big/bestgS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_big/bestgS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_big/centroidS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_big/centroidS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_big/policyS1.h5" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_big/policyS1.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_big/statS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_big/statS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_big/strirus_controller_v1_big.ini" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_big/strirus_controller_v1_big.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med/bestSeedS1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med/bestSeedS1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med/bestgS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med/bestgS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med/centroidS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med/centroidS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med/policyS1.h5" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med/policyS1.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med/statS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med/statS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med/strirus_controller_v1_med.ini" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med/strirus_controller_v1_med.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med_not_norm/bestSeedS1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med_not_norm/bestSeedS1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med_not_norm/bestgS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med_not_norm/bestgS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med_not_norm/centroidS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med_not_norm/centroidS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med_not_norm/policyS1.h5" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med_not_norm/policyS1.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med_not_norm/statS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med_not_norm/statS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_med_not_norm/strirus_controller_v1_med_not_norm.ini" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_med_not_norm/strirus_controller_v1_med_not_norm.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_small/bestSeedS1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_small/bestSeedS1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_small/bestgS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_small/bestgS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_small/centroidS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_small/centroidS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_small/policyS1.h5" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_small/policyS1.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_small/statS1.npy" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_small/statS1.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/last_experiment_small/strirus_controller_v1_small.ini" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/experiments/last_experiment_small/strirus_controller_v1_small.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/last_experiment/bestSeedS1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/last_experiment/bestgS1.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/last_experiment/centroidS1.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/last_experiment/policyS1.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/last_experiment/statS1.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/plot.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/plot.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/strirus_controller_v1.ini" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/strirus_controller_v1.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,80 +27,87 @@
     <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$test_neural_net.coverage" NAME="test_neural_net Coverage Results" MODIFIED="1555047519251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_norm.coverage" NAME="es_norm Coverage Results" MODIFIED="1556833554673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$salimans_Cart.coverage" NAME="salimans Cart Coverage Results" MODIFIED="1554965458612" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_test.coverage" NAME="es_test Coverage Results" MODIFIED="1556799504861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_test.coverage" NAME="es_test Coverage Results" MODIFIED="1557581275484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_helper.coverage" NAME="es_helper Coverage Results" MODIFIED="1556707867213" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_big.coverage" NAME="es_big Coverage Results" MODIFIED="1556833274037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_big.coverage" NAME="es_big Coverage Results" MODIFIED="1557000818870" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$test.coverage" NAME="test Coverage Results" MODIFIED="1554964630469" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$neuralnetwork.coverage" NAME="es Coverage Results" MODIFIED="1555569686563" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_small.coverage" NAME="es_small Coverage Results" MODIFIED="1556833287603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es.coverage" NAME="es Coverage Results" MODIFIED="1556999359766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es_remote.coverage" NAME="es_remote Coverage Results" MODIFIED="1557334285895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/strirus_gym_mujoco_simulation$es.coverage" NAME="es Coverage Results" MODIFIED="1557337232269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="283936600">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="8" />
+          <entry key="project.closed" value="18" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.2" value="2" />
+          <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="1" />
-          <entry key="project.open.time.8" value="2" />
-          <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="11" />
+          <entry key="project.open.time.7" value="8" />
+          <entry key="project.open.time.8" value="4" />
+          <entry key="project.open.time.9" value="2" />
+          <entry key="project.opened" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="TXT" value="1" />
-          <entry key="ini" value="14" />
+          <entry key="ini" value="17" />
+          <entry key="ipynb" value="1" />
           <entry key="md" value="3" />
           <entry key="pxi" value="1" />
-          <entry key="py" value="77" />
+          <entry key="py" value="78" />
           <entry key="pyi" value="1" />
-          <entry key="txt" value="1" />
-          <entry key="urdf" value="1" />
-          <entry key="xml" value="4" />
+          <entry key="txt" value="2" />
+          <entry key="urdf" value="2" />
+          <entry key="xml" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Cython" value="1" />
-          <entry key="Ini" value="14" />
+          <entry key="IPNB" value="1" />
+          <entry key="Ini" value="17" />
           <entry key="Markdown" value="3" />
-          <entry key="PLAIN_TEXT" value="3" />
-          <entry key="Python" value="76" />
+          <entry key="PLAIN_TEXT" value="5" />
+          <entry key="Python" value="77" />
           <entry key="PythonStub" value="1" />
           <entry key="UML" value="1" />
-          <entry key="XML" value="4" />
+          <entry key="XML" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="ini" value="227" />
+          <entry key="ini" value="342" />
           <entry key="md" value="685" />
-          <entry key="py" value="2075" />
-          <entry key="xml" value="219" />
+          <entry key="py" value="2921" />
+          <entry key="xml" value="284" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Ini" value="227" />
+          <entry key="Ini" value="342" />
           <entry key="Markdown" value="685" />
-          <entry key="Python" value="2075" />
-          <entry key="XML" value="219" />
+          <entry key="Python" value="2921" />
+          <entry key="XML" value="284" />
         </counts>
       </usages-collector>
     </session>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="strirus_gym_mujoco_simulation" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/es.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="271" column="9" lean-forward="true" selection-start-line="271" selection-start-column="9" selection-end-line="271" selection-end-column="9" />
+            <state relative-caret-position="556">
+              <caret line="344" column="107" selection-start-line="344" selection-start-column="107" selection-end-line="344" selection-end-column="107" />
               <folding>
                 <element signature="e#17#36#0" expanded="true" />
               </folding>
@@ -125,22 +116,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
-              <folding>
-                <element signature="e#177#187#0" expanded="true" />
-              </folding>
+        <entry file="file://$PROJECT_DIR$/scripts/plot.ipynb">
+          <provider selected="true" editor-type-id="ipnb-editor">
+            <state>
+              <selected id="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/helper.txt">
+        <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/terrain.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="456" selection-start-column="456" selection-end-column="456" />
+            <state relative-caret-position="75">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -148,26 +136,36 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/strirus_controller_v1.ini">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="945">
-              <caret line="63" selection-end-line="69" />
+            <state relative-caret-position="180">
+              <caret line="12" column="49" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="49" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/experiments/last_experiment_big/strirus_controller_v1_big.ini">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="787">
-              <caret line="129" column="79" selection-start-line="129" selection-start-column="79" selection-end-line="129" selection-end-column="79" />
+            <state relative-caret-position="1905">
+              <caret line="127" column="58" selection-start-line="127" selection-start-column="58" selection-end-line="127" selection-end-column="58" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.urdf">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/strirus_gamma_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="35" column="16" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
+            <state relative-caret-position="435">
+              <caret line="32" column="30" lean-forward="true" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -183,8 +181,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>__file__</find>
-      <find>__file</find>
       <find>file</find>
       <find>act</find>
       <find>23</find>
@@ -200,7 +196,6 @@
       <find>gym</find>
       <find>ac += ob[:12]</find>
       <find>ini</find>
-      <find>save_obs</find>
       <find>Elap</find>
       <find>roll</find>
       <find>lina</find>
@@ -208,6 +203,14 @@
       <find>config</find>
       <find>stat</find>
       <find>test</find>
+      <find>avoid</find>
+      <find>rollout_t</find>
+      <find>envChangeEvery</find>
+      <find>noiseStdDev</find>
+      <find>stepsize</find>
+      <find>save_obs</find>
+      <find>ob_stat</find>
+      <find>obs</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -224,13 +227,15 @@
         <option value="$PROJECT_DIR$/scripts/Strirus_gamma_controller-v0.ini" />
         <option value="$PROJECT_DIR$/scripts/salimans.py" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.xml" />
         <option value="$PROJECT_DIR$/scripts/test_neural_net.py" />
-        <option value="$PROJECT_DIR$/scripts/strirus_controller_v1_big.ini" />
         <option value="$PROJECT_DIR$/scripts/strirus_controller_v1_small.ini" />
         <option value="$PROJECT_DIR$/scripts/strirus_controller_v1_norm.ini" />
         <option value="$PROJECT_DIR$/robot_gym_envs/envs/strirus_gamma_controller.py" />
+        <option value="$PROJECT_DIR$/scripts/strirus_controller_v1_big.ini" />
+        <option value="$PROJECT_DIR$/scripts/last_experiment_big/strirus_controller_v1_big.ini" />
+        <option value="$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.xml" />
         <option value="$PROJECT_DIR$/scripts/strirus_controller_v1.ini" />
+        <option value="$PROJECT_DIR$/scripts/plot.ipynb" />
         <option value="$PROJECT_DIR$/scripts/es.py" />
       </list>
     </option>
@@ -242,10 +247,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2310" />
-    <option name="y" value="256" />
-    <option name="width" value="1430" />
-    <option name="height" value="798" />
+    <option name="x" value="1875" />
+    <option name="y" value="159" />
+    <option name="width" value="1900" />
+    <option name="height" value="796" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -269,7 +274,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -304,13 +308,20 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/Загрузки/marvelmind.py-master/src/marvelmind.py" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -324,7 +335,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.es">
+  <component name="RunManager" selected="Python.es_test">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="strirus_gym_mujoco_simulation" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -443,6 +454,30 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="es_remote" type="PythonConfigurationType" factoryName="Python">
+      <module name="strirus_gym_mujoco_simulation" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="LD_LIBRARY_PATH" value="$PROJECT_DIR$/../../../../../../lupasic_vm/.mujoco/mujoco200/bin" />
+        <env name="LD_PRELOAD" value="/usr/lib/x86_64-linux-gnu/libGLEW.so" />
+      </envs>
+      <option name="SDK_HOME" value="sftp://lupasic_vm@10.90.137.5:22/usr/bin/python3" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/es.py" />
+      <option name="PARAMETERS" value="-f strirus_controller_v1.ini -d last_experiment" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="es_small" type="PythonConfigurationType" factoryName="Python">
       <module name="strirus_gym_mujoco_simulation" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -483,7 +518,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/es.py" />
-      <option name="PARAMETERS" value="-f strirus_controller_v1.ini -d experiment_092 -t -c" />
+      <option name="PARAMETERS" value="-f strirus_controller_v1.ini -d last_experiment -t -c" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -493,6 +528,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.es" />
+      <item itemvalue="Python.es_remote" />
       <item itemvalue="Python.es_norm" />
       <item itemvalue="Python.es_small" />
       <item itemvalue="Python.es_big" />
@@ -531,28 +567,30 @@
     <frame x="1920" y="27" width="1920" height="1173" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48986486" visible="true" weight="0.37726787" />
-      <window_info id="Structure" order="1" sideWeight="0.5101351" side_tool="true" visible="true" weight="0.37726787" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48455286" visible="true" weight="0.3094984" />
+      <window_info id="Structure" order="1" sideWeight="0.51544714" side_tool="true" weight="0.28975454" />
+      <window_info id="Favorites" order="2" sideWeight="0.51544714" side_tool="true" weight="0.28975454" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3291506" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.14285715" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.5405405" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.26833978" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3619691" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3291506" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3286026" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3291506" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3286026" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.3291506" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3291506" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.19594595" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3286026" />
+      <window_info anchor="bottom" id="File Transfer" order="13" weight="0.32818532" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="430" height="853" id="Documentation" order="5" side_tool="true" visible="true" weight="0.08751334" />
+      <window_info anchor="right" x="0" y="0" width="430" height="853" id="Documentation" order="5" sideWeight="0.5057915" side_tool="true" visible="true" weight="0.18196371" />
+      <window_info anchor="right" id="Remote Host" order="6" sideWeight="0.49420848" visible="true" weight="0.18196371" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -568,11 +606,6 @@
           <url>file://$PROJECT_DIR$/scripts/test.py</url>
           <line>12</line>
           <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/scripts/es.py</url>
-          <line>1941</line>
-          <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -590,11 +623,36 @@
         <watch expression="dist_variance" />
         <watch expression="rews" />
         <watch expression="cfit" />
+        <watch expression="ac - prev_ac" language="Python" />
+        <watch expression="statistics.median(z_ax)" language="Python" />
+        <watch expression="statistics.mean(z_ax)" language="Python" />
+        <watch expression="abs(ac - prev_ac).any() &gt; max_pos_acc_per_step" language="Python" />
+        <watch expression="abs(ac - prev_ac)" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>statistics.mean(z_ax)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>statistics.median(z_ax)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>abs(ac - prev_ac).any() &gt; max_pos_acc_per_step</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>ac - prev_ac</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>ob[None]</expression-string>
         <language-id>Python</language-id>
@@ -806,9 +864,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.urdf">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file:///usr/local/lib/python3.6/dist-packages/h5py/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2" />
@@ -835,13 +890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/terrain.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -877,31 +925,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/last_experiment_big/strirus_controller_v1_big.ini" />
+    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/-1247971763/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="2566" column="8" selection-start-line="2566" selection-start-column="8" selection-end-line="2566" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/plot.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/terrain.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/experiments/last_experiment_big/strirus_controller_v1_big.ini">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="787">
-          <caret line="129" column="79" selection-start-line="129" selection-start-column="79" selection-end-line="129" selection-end-column="79" />
+        <state relative-caret-position="1905">
+          <caret line="127" column="58" selection-start-line="127" selection-start-column="58" selection-end-line="127" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/assets/strirus_gamma_30deg_120btw.urdf">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/strirus_controller_v1.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="49" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="49" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/robot_gym_envs/envs/strirus_gamma_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="35" column="16" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/strirus_controller_v1.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
-          <caret line="63" selection-end-line="69" />
+        <state relative-caret-position="435">
+          <caret line="32" column="30" lean-forward="true" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/es.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="271" column="9" lean-forward="true" selection-start-line="271" selection-start-column="9" selection-end-line="271" selection-end-column="9" />
+        <state relative-caret-position="556">
+          <caret line="344" column="107" selection-start-line="344" selection-start-column="107" selection-end-line="344" selection-end-column="107" />
           <folding>
             <element signature="e#17#36#0" expanded="true" />
           </folding>
