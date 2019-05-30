@@ -226,6 +226,22 @@ def bins(x, dim, num_bins, name):
     scores_nab = tf.reshape(scores, [-1, dim, num_bins])
     return tf.argmax(scores_nab, 2)  # 0 ... num_bins-1
 
+def quaternion_to_euler(q):
+    (x, y, z, w) = (q[0], q[1], q[2], q[3])
+    t0 = +2.0 * (w * x + y * z)
+    t1 = +1.0 - 2.0 * (x * x + y * y)
+    roll = math.atan2(t0, t1)
+    t2 = +2.0 * (w * y - z * x)
+    t2 = +1.0 if t2 > +1.0 else t2
+    t2 = -1.0 if t2 < -1.0 else t2
+    pitch = math.asin(t2)
+    t3 = +2.0 * (w * z + x * y)
+    t4 = +1.0 - 2.0 * (y * y + z * z)
+    yaw = math.atan2(t3, t4)
+    roll = math.degrees(roll)
+    yaw = math.degrees(yaw)
+    pitch = math.degrees(pitch)
+    return [yaw, pitch, roll]
 
 # Policy/neural network
 class Policy:
@@ -259,6 +275,7 @@ class Policy:
         global max_dist_var
         global w1
         global w2
+        global w3
         global leg_rand_pos
         global step_time_individual_limit
         global tasks_amount
@@ -270,6 +287,10 @@ class Policy:
 		"""
         # render = True
 
+        directions = np.array([[1,0,0],[-1,0,0],[0,1,0],[0,-1,0]])
+        Pi = np.array([[1,0,0],[0,1,0],[0,0,0]])
+        PiPerpend = np.cross(Pi[0],Pi[1])
+        eps = 0.0001
         if not doTest:
             timestep_limit = step_time_individual_limit
         else:
@@ -284,53 +305,54 @@ class Policy:
         rews = []
         if save_obs:
             obs = []
-        accs =[]
         # To ensure replicability (we always pass a valid seed, even if fully-random evaluation is going to be run)
         if seed is not None:
             env.seed(seed)
 
         for task in range(tasks_amount):
-            dist_variance = 0
-            cur_rew = 0
-            z_ax =[]
+            expected_dir = directions[task]
+            expected_dir = expected_dir / norm(expected_dir)
+            temp = np.matrix(expected_dir)
+            Pd = np.array(temp.transpose()*np.linalg.inv(temp*temp.transpose())*temp)
+            dist_error = [[],[]]
+            z_ax =[[],[]]
             ob = env.reset()
             for cur_task_step in range(timestep_limit):
                 # prepare input var
-                if task == 0:
-                    ob[20] = 1
-                if task == 1:
-                    ob[20] = -1
-                if task == 2:
-                    ob[21] = 1
-                if task == 3:
-                    ob[21] = -1
-                ob[:12] = [math.fmod(i, math.pi * 2) for i in ob[:12]]
+                ob[20:23] = expected_dir
 
+
+                # we need data from encoders only for 2pi solution
+                # TODO understand how to solve 2PI collision
+                ob[:12] = [math.fmod(i, math.pi * 2) for i in ob[:12]]
                 # receive output values
                 ac = self.act(ob[None], random_stream=random_stream)[0]
+                # Some constraints and assumptions
                 ac = ac/norm(ac)
                 ac = (ac + 1.0) / 2.0
+
+                # Inertial neurons (avoid drastically velocity changing)
                 if cur_task_step == 0:
                     prev_ac = ac
                 else:
                     ac = sigma * ac + (1 - sigma) * prev_ac
                     if (abs(ac - prev_ac) > max_pos_acc_per_step).any():
                         #penalti
-                        dist_variance = 99999
+                        finish = 1
                     prev_ac = ac
 
+                # print(str(quaternion_to_euler(ob[12:16]))+" second " + str(quaternion_to_euler(ob[16:20])))
+
+
                 # output post processing
-                if task == 0:
-                    pass
-                if task == 1:
+                if ob[20] < 0 and ob[21] == 0:
                     ac *= -1
-                if task == 2:
+                if ob[21] > 0 :
                     ac[3:5] *= -1
                     ac[6:8] *= -1
-                if task == 3:
+                if ob[21] < 0:
                     ac[0:2] *= -1
                     ac[9:11] *= -1
-                # ac += ob[:12]
 
                 # Save observations
                 if save_obs:
@@ -346,45 +368,30 @@ class Policy:
                 cur_task_step += 1
 
 
-                body_1_pos = env.unwrapped.data.get_body_xpos("body_1_part").flat
-                body_2_pos = env.unwrapped.data.get_body_xpos("body_2_part").flat
-                # Append the reward
-                if task == 0:
-                    if dist_variance < abs(body_1_pos[1]) or dist_variance < abs(body_2_pos[1]):
-                        if dist_variance < abs(body_1_pos[1]):
-                            dist_variance = abs(body_1_pos[1])
-                        else:
-                            dist_variance = abs(body_2_pos[1])
-                    # dist_variance += abs(body_1_pos[1])
-                if task == 1:
-                    dist_variance += abs(body_1_pos[1])
-                if task == 2:
-                    dist_variance += abs(body_1_pos[0])
-                if task == 3:
-                    dist_variance += abs(body_1_pos[0])
-                z_ax.append((body_1_pos[2] + body_2_pos[2])/2)
+                body_1_pos = env.unwrapped.data.get_site_xpos("body_1_part_site").flat
+                body_2_pos = env.unwrapped.data.get_site_xpos("body_2_part_site").flat
+                z_ax[0].append(norm(np.dot((np.eye(3) - Pi),body_1_pos)))
+                z_ax[1].append(norm(np.dot((np.eye(3) - Pi),body_2_pos)))
+                cur_dist_err = []
+                cur_dist_err.append(np.dot(np.cross(expected_dir,body_1_pos),PiPerpend))
+                cur_dist_err.append(np.dot(np.cross(expected_dir,body_2_pos),PiPerpend))
+                dist_error[0].append(cur_dist_err[0])
+                dist_error[1].append(cur_dist_err[1])
 
                 if doTest:
                     finish = cur_task_step == timestep_limit
                 else:
-                    finish = cur_task_step == timestep_limit or dist_variance > max_dist_var
+                    finish = cur_task_step == timestep_limit or abs(cur_dist_err[0]) > max_dist_var \
+                             or abs(cur_dist_err[1]) > max_dist_var
 
                 if finish:
-                    if task == 0:
-                        cur_rew = w1 * math.atan2(abs(body_1_pos[0]), dist_variance) + w2 * abs(body_1_pos[0]) \
-                                  + statistics.median(z_ax)
-                    if task == 1:
-                        cur_rew = w1 * math.atan2(abs(body_1_pos[0]), dist_variance) + w2 * (
-                                abs(body_1_pos[0]) / cur_task_step)
-                    if task == 2:
-                        cur_rew = w1 * math.atan2(abs(body_1_pos[1]), dist_variance) + w2 * (
-                                abs(body_1_pos[1]) / cur_task_step)
-                    if task == 3:
-                        cur_rew = w1 * math.atan2(abs(body_1_pos[1]), dist_variance) + w2 * (
-                                abs(body_1_pos[1]) / cur_task_step)
-
+                    z_ax = np.array(z_ax)
+                    dist_error = np.array(dist_error)
+                    part1 = np.sum([np.sqrt(np.mean(z_ax[i]**2)) - np.std(z_ax[i]) for i in range(z_ax.shape[0])])
+                    part2 = np.sum([1/((np.sqrt(np.mean(dist_error[i]**2)) - np.std(dist_error[i]))+eps) for i in range(z_ax.shape[0])])
+                    part3 = norm(np.dot(Pd,body_1_pos))/cur_task_step
+                    cur_rew = w1 * part1 + w2 * part2 + w3*part3
                     rews.append(cur_rew / tasks_amount)
-                    dist_variance = 0
                     break
 
                 if render:
@@ -398,8 +405,8 @@ class Policy:
         rews = np.array(rews, dtype=np.float32)
         if save_obs:
             # Return the observations too!!!
-            return rews, task + 1, np.array(obs)
-        return rews, task + 1
+            return rews, task + 1, np.array(obs), np.array([w1*part1, w2*part2, w3*part3])
+        return rews, task + 1, np.array([w1*part1, w2*part2, w3*part3])
 
 
     def set_trainable_flat(self, x):
@@ -678,6 +685,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
     global storingRate
     global filedir
 
+    fl = 0
     # Get parameters to be trained (once only!!!)
     center = policy.get_trainable_flat()
     # Extract the number of parameters
@@ -710,6 +718,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
 
     bestsol = None
     bestfit = -9999.0  # best fitness achieved so far
+    bestfit_parts = None
     ceval = 0  # current evaluation
     cgen = 0  # current generation
     start_time = time.time()
@@ -764,7 +773,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
                     # We do not set <currSeed> to None since we want to replicate the evaluation in test phase!
                     currSeed = rs.randint(1, 10001)
                 if rs.rand() < 0.01:
-                    eval_rews, eval_length, obs = policy.rollout(env, render=False, trial=t, seed=currSeed,
+                    eval_rews, eval_length, obs, fitness_parts = policy.rollout(env, render=False, trial=t, seed=currSeed,
                                                                  save_obs=True,
                                                                  random_stream=rs)  # eval rollouts don't obey task_data.timestep_limit
                     cfit = eval_rews.sum()
@@ -779,6 +788,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
                             # - seed
                             # - mean and standard deviation
                             bestfit = cbestfit
+                            bestfit_parts = fitness_parts
                             bestsol = np.copy(sample[k])
                             # Save best sample found
                             fname = filedir + "/bestgS" + str(seed)
@@ -791,10 +801,13 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
                             fp = open(fname, "w")
                             fp.write("%d" % currSeed)
                             fp.close()
+
+
+
                     # Update observation mean, std and count for successive normalizations
                     ob_stat.increment(obs.sum(axis=0), np.square(obs).sum(axis=0), len(obs))
                 else:
-                    eval_rews, eval_length = policy.rollout(env, render=False, trial=t, seed=currSeed,
+                    eval_rews, eval_length,fitness_parts = policy.rollout(env, render=False, trial=t, seed=currSeed,
                                                             random_stream=rs)  # eval rollouts don't obey task_data.timestep_limit
                     cfit = eval_rews.sum()
                     if cfit > cbestfit:
@@ -808,6 +821,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
                             # - seed
                             # - mean and standard deviation
                             bestfit = cbestfit
+                            bestfit_parts = fitness_parts
                             bestsol = np.copy(sample[k])
                             # Save best sample found
                             fname = filedir + "/bestgS" + str(seed)
@@ -866,6 +880,7 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
 
         averagef = averageFit(fitness)
         stat = np.append(stat, [ceval, bestfit, averagef, fitness[0]])
+        stat = np.append(stat, bestfit_parts)
         elapsed = (time.time() - start_time)
 
         # We store the best sample either at the first generation, or every <storingRate> generations, or when the evolution ends
@@ -877,14 +892,17 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
             fname = filedir + "/statS" + str(seed)
             tmpstat = np.copy(stat)
             statsize = np.shape(tmpstat)[0]
-            statsize = statsize / 4
+            if fl == 0:
+                first_stat_shape = statsize
+                fl = 1
+            statsize = statsize / first_stat_shape
             statsize = int(statsize)
-            tmpstat.resize(statsize, 4)
+            tmpstat.resize(statsize, first_stat_shape)
             tmpstat = tmpstat.transpose()
             np.save(fname, tmpstat)
 
-        print('Seed %d Gen %d Steps %d Bestfit %.2f bestsam %.2f Avg %.2f Elapsed %d' % (
-            seed, cgen, ceval, bestfit, fitness[0], averagef, elapsed))
+        print('Seed %d Gen %d Steps %d Bestfit %.2f each fit part %s bestsam %.2f Avg %.2f Elapsed %d' % (
+            seed, cgen, ceval, bestfit, bestfit_parts, fitness[0], averagef, elapsed))
 
     end_time = time.time()
     print('Simulation took %d seconds' % (end_time - start_time))
@@ -892,17 +910,17 @@ def evolve_CMAES(env, policy, ob_stat, seed, nevals, ntrials):
     # Stat
     fname = filedir + "/S" + str(seed) + ".fit"
     fp = open(fname, "w")
-    fp.write('Seed %d Gen %d Evaluat %d Bestfit %.2f bestoffspring %.2f Average %.2f Runtime %d\n' % (
-        seed, cgen, ceval, bestfit, fitness[0], averagef, (time.time() - start_time)))
+    fp.write('Seed %d Gen %d Steps %d Bestfit %.2f each fit part %s bestoffspring %.2f Average %.2f Runtime %d\n' % (
+        seed, cgen, ceval, bestfit, bestfit_parts, fitness[0], averagef, (time.time() - start_time)))
     fp.close()
     # Stat file
     fname = filedir + "/statS" + str(seed)
     statsize = np.shape(stat)[0]
-    statsize = statsize / 4
+    statsize = statsize / first_stat_shape
     statsize = int(statsize)
-    stat.resize(statsize, 4)
-    stat = stat.transpose()
-    np.save(fname, stat)
+    tmpstat.resize(statsize, first_stat_shape)
+    tmpstat = tmpstat.transpose()
+    np.save(fname, tmpstat)
 
 
 # Evolve with ES algorithm taken from Salimans et al. (2017)
@@ -918,6 +936,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
     global numHiddens
     global filedir
 
+    fl = 0
     # initialize the solution center
     center = policy.get_trainable_flat()
     # Extract the number of parameters
@@ -936,6 +955,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
 
     bestsol = None
     bestfit = -9999.0  # best fitness achieved so far
+    bestfit_parts = None
     ceval = 0  # current evaluation
     cgen = 0  # current generation
     start_time = time.time()
@@ -994,7 +1014,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
                     # We do not set <currSeed> to None since we want to replicate the evaluation in test phase!
                     currSeed = rs.randint(1, 10001)
                 if rs.rand() < 0.01:
-                    eval_rews, eval_length, obs = policy.rollout(env, render=False, trial=t, seed=currSeed,
+                    eval_rews, eval_length, obs, fitness_parts = policy.rollout(env, render=False, trial=t, seed=currSeed,
                                                                  save_obs=True,
                                                                  random_stream=rs)  # eval rollouts don't obey task_data.timestep_limit
                     cfit = eval_rews.sum()
@@ -1009,6 +1029,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
                             # - seed
                             # - mean and standard deviation
                             bestfit = cbestfit
+                            bestfit_parts = fitness_parts
                             bestsol = np.copy(offspring[k])
                             # Save best sample found
                             fname = filedir + "/bestgS" + str(seed)
@@ -1024,7 +1045,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
                     # Update observation mean, std and count for successive normalizations
                     ob_stat.increment(obs.sum(axis=0), np.square(obs).sum(axis=0), len(obs))
                 else:
-                    eval_rews, eval_length = policy.rollout(env, render=False, trial=t, seed=currSeed,
+                    eval_rews, eval_length, fitness_parts = policy.rollout(env, render=False, trial=t, seed=currSeed,
                                                             random_stream=rs)  # eval rollouts don't obey task_data.timestep_limit
                     cfit = eval_rews.sum()
                     if cfit > cbestfit:
@@ -1038,6 +1059,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
                             # - seed
                             # - mean and standard deviation
                             bestfit = cbestfit
+                            bestfit_parts = fitness_parts
                             bestsol = np.copy(offspring[k])
                             # Save best sample found
                             fname = filedir + "/bestgS" + str(seed)
@@ -1096,7 +1118,7 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
         # Compute average fitness of the offspring
         averagef = averageFit(fitness)
         stat = np.append(stat, [ceval, bestfit, averagef, fitness[batchSize * 2 - 1]])
-
+        stat = np.append(stat,bestfit_parts)
         # We store the best sample either at the first generation, or every <storingRate> generations, or when the evolution ends
         if cgen == 1 or cgen % storingRate == 0 or ceval >= nevals:
             # Save the centroid (overwrite old one)
@@ -1106,9 +1128,12 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
             fname = filedir + "/statS" + str(seed)
             tmpstat = np.copy(stat)
             statsize = np.shape(tmpstat)[0]
-            statsize = statsize / 4
+            if fl == 0:
+                first_stat_shape = statsize
+                fl = 1
+            statsize = statsize / first_stat_shape
             statsize = int(statsize)
-            tmpstat.resize(statsize, 4)
+            tmpstat.resize(statsize, first_stat_shape)
             tmpstat = tmpstat.transpose()
             np.save(fname, tmpstat)
 
@@ -1116,8 +1141,8 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
         elapsed = (time.time() - start_time)
 
         # Print information
-        print('Seed %d gen %d steps %d bestfit %.2f bestsam %.2f Avg %.2f Elapsed %d' % (
-            seed, cgen, ceval, bestfit, fitness[batchSize * 2 - 1], averagef, elapsed))
+        print('Seed %d Gen %d Steps %d Bestfit %.2f each fit part %s bestsam %.2f Avg %.2f Elapsed %d' % (
+            seed, cgen, ceval, bestfit, bestfit_parts, fitness[batchSize * 2 - 1], averagef, elapsed))
 
     end_time = time.time()
     print('Simulation took %d seconds' % (end_time - start_time))
@@ -1125,17 +1150,17 @@ def evolve_ES(env, policy, ob_stat, seed, nevals, ntrials):
     # Stat
     fname = filedir + "/S" + str(seed) + ".fit"
     fp = open(fname, "w")
-    fp.write('Seed %d gen %d eval %d bestfit %.2f bestoffspring %.2f average %.2f runtime %d\n' % (
-        seed, cgen, ceval, bestfit, fitness[batchSize * 2 - 1], averagef, (time.time() - start_time)))
+    fp.write('Seed %d Gen %d Steps %d Bestfit %.2f each fit part %s bestoffspring %.2f Average %.2f Runtime %d\n' % (
+        seed, cgen, ceval, bestfit, bestfit_parts, fitness[batchSize * 2 - 1], averagef, (time.time() - start_time)))
     fp.close()
     # Stat file
     fname = filedir + "/statS" + str(seed)
     statsize = np.shape(stat)[0]
-    statsize = statsize / 4
+    statsize = statsize / first_stat_shape
     statsize = int(statsize)
-    stat.resize(statsize, 4)
-    stat = stat.transpose()
-    np.save(fname, stat)
+    tmpstat.resize(statsize, first_stat_shape)
+    tmpstat = tmpstat.transpose()
+    np.save(fname, tmpstat)
 
 
 # Evolve with xNES algorithm
@@ -1147,6 +1172,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
     global storingRate
     global filedir
 
+    fl = 0
     # initialize the solution center
     center = policy.get_trainable_flat()
     # Extract the number of parameters
@@ -1177,6 +1203,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
 
     bestsol = None
     bestfit = -999999999.0  # best fitness achieved so far
+    bestfit_parts = None
     bestseed = -1
     bestgen = 0
     ceval = 0  # current evaluation
@@ -1224,7 +1251,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
                     # We do not set <currSeed> to None since we want to replicate the evaluation in test phase!
                     currSeed = rs.randint(1, 10001)
                 if rs.rand() < 0.01:
-                    eval_rews, eval_length, obs = policy.rollout(env, render=False, trial=t, seed=currSeed,
+                    eval_rews, eval_length, obs, fitness_parts = policy.rollout(env, render=False, trial=t, seed=currSeed,
                                                                  save_obs=True,
                                                                  random_stream=rs)  # eval rollouts don't obey task_data.timestep_limit
                     cfit = eval_rews.sum()
@@ -1239,6 +1266,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
                             # - seed
                             # - mean and standard deviation
                             bestfit = cbestfit
+                            bestfit_parts = fitness_parts
                             bestsol = np.copy(sample[k])
                             # Save best sample found
                             fname = filedir + "/bestgS" + str(seed)
@@ -1254,7 +1282,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
                     # Update observation mean, std and count for successive normalizations
                     ob_stat.increment(obs.sum(axis=0), np.square(obs).sum(axis=0), len(obs))
                 else:
-                    eval_rews, eval_length = policy.rollout(env, render=False, trial=t, seed=currSeed,
+                    eval_rews, eval_length, fitness_parts = policy.rollout(env, render=False, trial=t, seed=currSeed,
                                                             random_stream=rs)  # eval rollouts don't obey task_data.timestep_limit
                     cfit = eval_rews.sum()
                     if cfit > cbestfit:
@@ -1268,6 +1296,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
                             # - seed
                             # - mean and standard deviation
                             bestfit = cbestfit
+                            bestfit_parts = fitness_parts
                             bestsol = np.copy(sample[k])
                             # Save best sample found
                             fname = filedir + "/bestgS" + str(seed)
@@ -1316,6 +1345,7 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
 
         averagef = averageFit(fitness)
         stat = np.append(stat, [ceval, bestfit, averagef, fitness[0]])
+        stat = np.append(stat,bestfit_parts)
         elapsed = (time.time() - start_time)
 
         # We store the best sample either at the first generation, or every <storingRate> generations, or when the evolution ends
@@ -1327,14 +1357,18 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
             fname = filedir + "/statS" + str(seed)
             tmpstat = np.copy(stat)
             statsize = np.shape(tmpstat)[0]
-            statsize = statsize / 4
+            if fl == 0:
+                first_stat_shape = statsize
+                fl = 1
+            statsize = statsize / first_stat_shape
             statsize = int(statsize)
-            tmpstat.resize(statsize, 4)
+            tmpstat.resize(statsize, first_stat_shape)
             tmpstat = tmpstat.transpose()
             np.save(fname, tmpstat)
 
-        print('Seed %d Gen %d Steps %d Bestfit %.2f bestsam %.2f Avg %.2f Elapsed %d' % (
-            seed, cgen, ceval, bestfit, fitness[0], averagef, elapsed))
+
+        print('Seed %d Gen %d Steps %d Bestfit %.2f each fit part %s bestsam %.2f Avg %.2f Elapsed %d' % (
+            seed, cgen, ceval, bestfit, bestfit_parts, fitness[0], averagef, elapsed))
 
     end_time = time.time()
     print('Simulation took %d seconds' % (end_time - start_time))
@@ -1342,16 +1376,17 @@ def evolve_xNES(env, policy, ob_stat, seed, nevals, ntrials):
     # Stat
     fname = filedir + "/S" + str(seed) + ".fit"
     fp = open(fname, "w")
-    fp.write('Seed %d Gen %d Evaluat %d Bestfit %.2f bestoffspring %.2f Average %.2f Runtime %d\n' % (
-        seed, cgen, ceval, bestfit, fitness[0], averagef, (time.time() - start_time)))
+    fp.write(
+        'Seed %d Gen %d Steps %d Bestfit %.2f each fit part %s bestoffspring %.2f Average %.2f Runtime %d\n' % (
+            seed, cgen, ceval, bestfit, bestfit_parts, fitness[0], averagef, (time.time() - start_time)))
     fp.close()
     fname = filedir + "/statS" + str(seed)
     statsize = np.shape(stat)[0]
-    statsize = statsize / 4
+    statsize = statsize / first_stat_shape
     statsize = int(statsize)
-    stat.resize(statsize, 4)
-    stat = stat.transpose()
-    np.save(fname, stat)
+    tmpstat.resize(statsize, first_stat_shape)
+    tmpstat = tmpstat.transpose()
+    np.save(fname, tmpstat)
 
 
 def evolve(env, policy, ob_stat, seed, nevals, ntrials):
@@ -1396,7 +1431,7 @@ def test(env, policy, seed, ntrials, centroidTest):
         cseed = int(cseed)
         print("testing seed %d" % cseed)
         env.render()
-        eval_rews, eval_length = policy.rollout(env, render=True, timestep_limit=step_time_individual_limit*4, trial=0,
+        eval_rews, eval_length, fitness_parts = policy.rollout(env, render=True, timestep_limit=step_time_individual_limit*4, trial=0,
                                                 seed=cseed)  # eval rollouts don't obey task_data.timestep_limit
         fit = eval_rews.sum()
     # env.close()
@@ -1417,7 +1452,7 @@ def test(env, policy, seed, ntrials, centroidTest):
         for t in range(ntrials):
             cseed = int(seeds[t])
             env.render()
-            eval_rews, eval_length = policy.rollout(env, render=True, timestep_limit=step_time_individual_limit*4, trial=t,
+            eval_rews, eval_length, fitness_parts = policy.rollout(env, render=True, timestep_limit=step_time_individual_limit*4, trial=t,
                                                     seed=cseed)  # eval rollouts don't obey task_data.timestep_limit
             eval_return = eval_rews.sum()
             print("trial %d - fit %lf" % (t, eval_return))
@@ -1456,6 +1491,7 @@ def parseConfigFile(filename):
     global max_dist_var
     global w1
     global w2
+    global w3
     global leg_rand_pos
     global max_processes
     global step_time_individual_limit
@@ -1547,6 +1583,8 @@ def parseConfigFile(filename):
         w1 = config.getfloat("FITNESS", "w1")
     if (config.has_option("FITNESS", "w2")):
         w2 = config.getfloat("FITNESS", "w2")
+    if (config.has_option("FITNESS", "w3")):
+        w3 = config.getfloat("FITNESS", "w3")
     if (config.has_option("FITNESS", "sigma")):
         sigma = config.getfloat("FITNESS", "sigma")
 
@@ -1792,6 +1830,7 @@ def main(argv):
     global max_dist_var
     global w1
     global w2
+    global w3
     global leg_rand_pos
     global max_processes
     global step_time_individual_limit
@@ -1885,7 +1924,8 @@ def main(argv):
 
         max_dist_var = 4.5
         w1 = 1
-        w2 = 2
+        w2 = 1
+        w3 = 1
         leg_rand_pos = 0
         max_processes = 1
         step_time_individual_limit = 1000

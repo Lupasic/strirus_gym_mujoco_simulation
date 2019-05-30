@@ -24,6 +24,7 @@
         <body name="body_1_part" pos="0 0 0.07">
             <freejoint/>
             <inertial pos="0.0930046 -3.767e-06 -0.00239317" quat="0.501994 0.501944 -0.498044 0.498002" mass="2.38893" diaginertia="0.0438695 0.0286149 0.0162443" />
+            <site type="box" name="body_1_part_site" pos="0 0 0"/>
             <geom type="mesh" mesh="body_1_30_part" />
             <body name="bridge_1_part" pos="0.247 0 0">
                 <inertial pos="0.00668872 0 7.7504e-05" quat="0.707088 0.707088 -0.00517401 0.00517401" mass="0.0934526" diaginertia="0.000234668 0.000231387 2.9584e-05" />
@@ -35,7 +36,9 @@
                     <geom type="mesh" mesh="bridge_2_part" />
                     <body name="body_2_part" pos="0.03 0 0">
                         <inertial pos="0.154054 5.875e-06 -0.00271984" quat="0.49812 0.498053 -0.501941 0.50187" mass="2.35583" diaginertia="0.0438457 0.0285897 0.0162089" />
+                        <site type="box" name="body_2_part_site" pos="0.247 0 0"/>
                         <geom type="mesh" mesh="body_2_30_part" />
+
                         <body name="leg_left_5" pos="0.06325 0.17893 0" quat="0.482963 -0.224144 -0.836516 -0.12941">
                             <inertial pos="-0.0133487 0 -0.0275841" quat="0.703293 -0.073343 -0.073343 0.703293" mass="0.0127063" diaginertia="9.763e-06 8.16912e-06 1.72988e-06" />
                             <joint name="leg_left_5_revolute_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-100000 100000" />
@@ -130,8 +133,8 @@
 	<jointpos name="leg_right_3_angle_act" joint="leg_right_3_revolute_joint" />
 	<jointpos name="leg_right_4_angle_act" joint="leg_right_4_revolute_joint" />
 	<jointpos name="leg_right_5_angle_act" joint="leg_right_5_revolute_joint" />
-	<framequat name="frameQuatBody1" objtype="body" objname="body_1_part" />
-	<framequat name="frameQuatBody2" objtype="body" objname="body_2_part" />
+	<framequat name="frameQuatBody1" objtype="site" objname="body_1_part_site" />
+	<framequat name="frameQuatBody2" objtype="site" objname="body_2_part_site" />
     </sensor>
 
 </mujoco>
